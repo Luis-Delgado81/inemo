@@ -1,42 +1,33 @@
 /* menu */
+.navigation {
+    background-color: #333;
 
-.menu ul {
-    list-style:none;
-    margin:0;
-    padding:0;
-   }
-   
-   /* items del menu */
-   
-   .menu ul li {
-    background-color:black;
-   }
-   
-   /* enlaces del menu */
-   
-   .menu ul a {
-    display:block;
-    color:#fff;
-    text-decoration:none;
-    font-weight:400;
-    font-size:15px;
-    padding:10px;
-    font-family:"HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    text-transform:uppercase;
-    letter-spacing:1px;
-   }
-   
-   /* items del menu */
-   
-   .menu ul li {
-    position:relative;
-    float:left;
-    margin:0;
-    padding:0;
-   }
-   
-   /* efecto al pasar el ratón por los items del menu */
-   
-   .menu ul li:hover {
-    background:black;
-   }
+  }
+  ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 9px 20px ;
+    overflow: hidden;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 9px 10px;
+    text-decoration: none;
+  }
+  
+  li a:hover {
+    background-color: rgba(233, 69, 19, 0.87);
+  }
+  .search{
+    padding: 7px 8px;
+  }
+  .bsearch{
+    padding: 7px 8px;
+  }
