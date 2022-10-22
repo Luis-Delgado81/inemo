@@ -31,6 +31,9 @@
   .bsearch{
     padding: 7px 8px;
   }
+  Area{
+    background-image: url('imagen/Colores');
+  }
   .home .carousel-item{
     min-height: 100vh;
     background-position: center;
