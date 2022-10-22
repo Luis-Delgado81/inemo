@@ -31,9 +31,21 @@
   .bsearch{
     padding: 7px 8px;
   }
-  Area{
-    background-image: url('imagen/Colores');
-  }
+  .header {
+    color: #36A0FF;
+    font-size: 27px;
+    padding: 10px;
+}
+  .bigicon {
+    font-size: 35px;
+    color: #36A0FF;
+}
+.mision{
+  text-align: justify;
+}
+.vision{
+  text-align: justify;
+}
   .home .carousel-item{
     min-height: 100vh;
     background-position: center;
