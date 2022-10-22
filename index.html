@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/estilos.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <title>Instituto Nueva Eneseñanza Moderna</title>
 </head>
 <body>
@@ -14,7 +15,7 @@
                 <li><a class="Logo" href="index.html">
                     INEMO</a></li>
                 <li>
-                    <a href="Quienessomos.html">Quienes somos?</a>
+                    <a href="#Quienes somos?">Quienes somos?</a>
                 </li>
                 <li>
                     <a href="Areas.html">Areas</a>
@@ -41,10 +42,45 @@
     <div class="container">
         <!--Espacio que dejo en la cabecera-->
     </div>
-    <section style="background-color: rgba(255, 60, 0, 0.884);">
-        <img src="\imagen\inscripciones.jpg" alt="Incripciones abiertas">
+    <section class = "home" style="background-color: orangered">
+        <div id="carousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-controls">
+              <ol class="carousel-indicators">
+                <li data-target="#carousel" data-slide-to="0" class="active" style="background-image:url('img/slide-1.jpg')"></li>
+                <li data-target="#carousel" data-slide-to="1" style="background-image:url('img/slide-2.jpg')"></li>
+                <li data-target="#carousel" data-slide-to="2" style="background-image:url('img/slide-3.jpg')"></li>
+                
+              </ol>
+              <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+               <img src="img/left-arrow.svg" alt="Prev"> 
+            </a>
+            <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+              <img src="img/right-arrow.svg" alt="Next">
+            </a>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active" style="background-image:url('img/slide-1.jpg')">
+                <div class="container">
+                   <h2>I'm Rose</h2>
+                   <p>Web Developer</p>
+                </div>
+              </div>
+              <div class="carousel-item" style="background-image:url('img/slide-2.jpg')">
+                <div class="container">
+                   <h2>I'm Jasmine</h2>
+                   <p>Web Developer</p>
+                </div>
+              </div>
+              <div class="carousel-item" style="background-image:url('img/slide-3.jpg')">
+                <div class="container">
+                   <h2>I'm Ruby</h2>
+                   <p>Web Developer</p>
+                </div>
+              </div>
+            </div>
+          </div>
     </section>
-    <section style="background-color: white;">
+    <section id= "quienes somos?" style="background-color: white;">
         <article>QUIENES SOMOS?</article>
         <p>
            Somos una institucion de caracter privado, con mas de 30 años de experiencia a 
