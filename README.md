@@ -243,3 +243,4 @@ Copyright © 2026 INEMO - Instituto Enseñanza Moderna. Todos los derechos reser
 **Última actualización**: Marzo 2026
 
 Hecho con ❤️ para INEMO - Instituto Enseñanza Moderna
+# inemo
