@@ -1,0 +1,24 @@
+{
+  "noticias": [
+    {
+      "id": 1,
+      "titulo": "Bienvenida al Portal INEMO",
+      "contenido": "Nos complace presentar el nuevo portal web del Instituto Enseñanza Moderna INEMO, un espacio dedicado a compartir nuestras iniciativas educativas y mantener conectada nuestra comunidad.",
+      "imagen": "https://via.placeholder.com/600x400?text=INEMO+Noticias",
+      "fecha": "2026-03-08",
+      "autor": "Administrador",
+      "categoria": "General",
+      "estado": "activo"
+    },
+    {
+      "id": 2,
+      "titulo": "Nuevo Programa de Becas 2026",
+      "contenido": "INEMO lanza su nuevo programa de becas para estudiantes destacados. Las solicitudes están abiertas para estudios en educación, tecnología y humanidades.",
+      "imagen": "https://via.placeholder.com/600x400?text=Becas+2026",
+      "fecha": "2026-03-07",
+      "autor": "Administrador",
+      "categoria": "Becas",
+      "estado": "activo"
+    }
+  ]
+}

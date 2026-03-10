@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INEMO - Instituto Enseñanza Moderna</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav>
+        <div class="navbar-container">
+            <a href="/" class="logo">
+                <span>🎓</span>
+                <span>INEMO</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/frontend/pages/">Inicio</a></li>
+                <li><a href="/frontend/pages/noticias.html">Noticias</a></li>
+                <li><a href="/frontend/pages/eventos.html">Eventos</a></li>
+                <li><a href="/frontend/pages/nosotros.html">Nosotros</a></li>
+                <li><a href="/frontend/pages/contacto.html">Contacto</a></li>
+            </ul>
+            <div class="nav-user"></div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>INEMO</h1>
+            <p>Instituto Enseñanza Moderna - Transformando la educación</p>
+            <div class="hero-buttons">
+                <a href="/frontend/pages/noticias.html" class="btn btn-primary">📰 Últimas Noticias</a>
+                <a href="/frontend/pages/eventos.html" class="btn btn-secondary">🎪 Próximos Eventos</a>
+                <a href="/frontend/pages/contacto.html" class="btn btn-outline">✉️ Contáctenos</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Carrusel de Eventos -->
+    <section id="carousel-section">
+        <div class="container">
+            <h2 class="section-title">Próximos Eventos Destacados</h2>
+            <div id="eventos-carousel" class="carousel">
+                <div class="carousel-container">
+                    <div class="carousel-slide active">
+                        <img src="https://via.placeholder.com/1200x400?text=Evento+1" alt="Evento">
+                        <div class="carousel-slide-content">
+                            <h3 id="carousel-titulo">Cargando...</h3>
+                            <p id="carousel-fecha">...</p>
+                        </div>
+                    </div>
+                    <button class="carousel-btn prev">❮</button>
+                    <button class="carousel-btn next">❯</button>
+                </div>
+                <div class="carousel-controls">
+                    <span class="carousel-dot active"></span>
+                    <span class="carousel-dot"></span>
+                    <span class="carousel-dot"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Noticias Recientes -->
+    <section style="background: var(--fondo); padding: 60px 20px;">
+        <div class="container">
+            <h2 class="section-title">Noticias Recientes</h2>
+            <div id="noticias-recientes" class="cards-grid">
+                <div class="loading"><div class="spinner"></div>Cargando noticias...</div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="/frontend/pages/noticias.html" class="btn btn-primary">Ver todas las noticias →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Características -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">¿Por qué INEMO?</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>🎯 Educación de Calidad</h3>
+                    <p>Ofrecemos programas educativos innovadores diseñados para preparar estudiantes para el futuro.</p>
+                </div>
+                <div class="card">
+                    <h3>👨‍🏫 Docentes Especializados</h3>
+                    <p>Nuestro equipo de expertos está comprometido con la excelencia académica y el desarrollo integral.</p>
+                </div>
+                <div class="card">
+                    <h3>💡 Innovación Tecnológica</h3>
+                    <p>Utilizamos las últimas herramientas tecnológicas para optimizar el aprendizaje.</p>
+                </div>
+                <div class="card">
+                    <h3>🌱 Desarrollo Integral</h3>
+                    <p>Promovemos valores éticos, responsabilidad social y pensamiento crítico.</p>
+                </div>
+                <div class="card">
+                    <h3>🏆 Resultados Comprobados</h3>
+                    <p>Nuestros estudiantes logran excelentes resultados en pruebas nacionales e internacionales.</p>
+                </div>
+                <div class="card">
+                    <h3>🤝 Comunidad Activa</h3>
+                    <p>Formamos parte de una comunidad comprometida con la transformación educativa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>🎓 INEMO</h4>
+                <p>Instituto Enseñanza Moderna - Transformando vidas a través de la educación de calidad.</p>
+                <div class="social-links">
+                    <a href="#" title="Facebook">f</a>
+                    <a href="#" title="Twitter">𝕏</a>
+                    <a href="#" title="Instagram">📷</a>
+                    <a href="#" title="LinkedIn">in</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Navegación</h4>
+                <a href="/">Inicio</a>
+                <a href="/frontend/pages/noticias.html">Noticias</a>
+                <a href="/frontend/pages/eventos.html">Eventos</a>
+                <a href="/frontend/pages/nosotros.html">Nosotros</a>
+                <a href="/frontend/pages/contacto.html">Contacto</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p>📍 Malambo, Atlántico, Colombia</p>
+                <p>📞 +57 300 567 8901</p>
+                <p>📧 contacto@inemo.edu.co</p>
+                <p>🕐 Lun - Vie: 8:00 AM - 5:00 PM</p>
+            </div>
+            <div class="footer-section">
+                <h4>Información</h4>
+                <a href="#">Términos de Servicio</a>
+                <a href="#">Política de Privacidad</a>
+                <a href="#">Política de Cookies</a>
+                <a href="#">Mapa del Sitio</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 INEMO - Instituto Enseñanza Moderna. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        // Cargar noticias recientes
+        async function cargarNoticiasRecientes() {
+            try {
+                const noticias = await apiRequest('/noticias');
+                const container = document.getElementById('noticias-recientes');
+                
+                if (noticias.length === 0) {
+                    container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No hay noticias disponibles.</p>';
+                    return;
+                }
+
+                container.innerHTML = noticias.slice(0, 3).map(noticia => `
+                    <div class="card">
+                        <img src="${noticia.imagen}" alt="${noticia.titulo}">
+                        <span class="fecha">${formatDate(noticia.fecha)}</span>
+                        <h3>${noticia.titulo}</h3>
+                        <p>${noticia.contenido.substring(0, 100)}...</p>
+                        <a href="/frontend/pages/noticias.html?id=${noticia.id}" class="btn btn-primary" style="width: 100%; text-align: center;">Leer más</a>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error al cargar noticias:', error);
+            }
+        }
+
+        // Cargar carrusel de eventos
+        async function cargarCarrousel() {
+            try {
+                const eventos = await apiRequest('/eventos');
+                if (eventos.length === 0) return;
+
+                const carousel = document.getElementById('eventos-carousel');
+                const container = carousel.querySelector('.carousel-container');
+                const controls = carousel.querySelector('.carousel-controls');
+
+                container.innerHTML = eventos.map((evento, i) => `
+                    <div class="carousel-slide ${i === 0 ? 'active' : ''}">
+                        <img src="${evento.imagen}" alt="${evento.titulo}">
+                        <div class="carousel-slide-content">
+                            <h3>${evento.titulo}</h3>
+                            <p>📅 ${formatDate(evento.fecha)} | 🕐 ${evento.hora} | 📍 ${evento.lugar}</p>
+                            <a href="/frontend/pages/eventos.html?id=${evento.id}" class="btn btn-primary" style="margin-top: 10px;">Ver detalles</a>
+                        </div>
+                    </div>
+                `).join('') + `
+                    <button class="carousel-btn prev">❮</button>
+                    <button class="carousel-btn next">❯</button>
+                `;
+
+                controls.innerHTML = eventos.map((_, i) => `
+                    <span class="carousel-dot ${i === 0 ? 'active' : ''}"></span>
+                `).join('');
+
+                new Carousel('eventos-carousel');
+            } catch (error) {
+                console.error('Error al cargar eventos:', error);
+            }
+        }
+
+        cargarNoticiasRecientes();
+        cargarCarrousel();
+    </script>
+</body>
+</html>

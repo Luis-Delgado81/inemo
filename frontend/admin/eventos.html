@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Eventos - INEMO Admin</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav>
+        <div class="navbar-container">
+            <a href="/" class="logo">
+                <span>🎓</span>
+                <span>INEMO ADMIN</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="contactos.html">Contactos</a></li>
+            </ul>
+            <div class="nav-user"></div>
+        </div>
+    </nav>
+
+    <section>
+        <div class="container">
+            <h1 class="section-title">🎪 Gestionar Eventos</h1>
+
+            <div id="alert-container"></div>
+
+            <div style="margin-bottom: 30px;">
+                <button class="btn btn-primary" id="btn-nuevo-evento">+ Crear Nuevo Evento</button>
+            </div>
+
+            <div style="background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px var(--sombra); overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Fecha</th>
+                            <th>Lugar</th>
+                            <th>Capacidad</th>
+                            <th>Inscritos</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventos-tbody">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 30px;">
+                                <div class="loading"><div class="spinner"></div>Cargando...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para crear/editar evento -->
+    <div id="modal-evento-form" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="modal-close">×</button>
+            <h2 class="modal-title" id="modal-title">Nuevo Evento</h2>
+            <form id="evento-form">
+                <div class="form-group">
+                    <label for="evento-titulo">Título *</label>
+                    <input type="text" id="evento-titulo" required>
+                </div>
+                <div class="form-group">
+                    <label for="evento-descripcion">Descripción *</label>
+                    <textarea id="evento-descripcion" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="evento-fecha">Fecha *</label>
+                    <input type="date" id="evento-fecha" required>
+                </div>
+                <div class="form-group">
+                    <label for="evento-hora">Hora *</label>
+                    <input type="time" id="evento-hora" required>
+                </div>
+                <div class="form-group">
+                    <label for="evento-lugar">Lugar *</label>
+                    <input type="text" id="evento-lugar" required>
+                </div>
+                <div class="form-group">
+                    <label for="evento-capacidad">Capacidad *</label>
+                    <input type="number" id="evento-capacidad" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="evento-imagen">URL de Imagen</label>
+                    <input type="url" id="evento-imagen" placeholder="https://...">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar Evento</button>
+                    <button type="button" class="btn btn-outline" onclick="cerrarModalEvento()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2026 INEMO - Panel Administrativo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        requireAdmin();
+
+        let eventos = [];
+        let eventoEditando = null;
+
+        async function cargarEventos() {
+            try {
+                eventos = await apiRequest('/eventos');
+                mostrarEventos();
+            } catch (error) {
+                showAlert('Error al cargar eventos: ' + error.message, 'error');
+            }
+        }
+
+        function mostrarEventos() {
+            const tbody = document.getElementById('eventos-tbody');
+            
+            if (eventos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 30px;">No hay eventos registrados.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = eventos.map(evento => {
+                const porcentaje = Math.round((evento.inscritos / evento.capacidad) * 100);
+                return `
+                    <tr>
+                        <td><strong>${evento.titulo}</strong></td>
+                        <td>${formatDate(evento.fecha)}</td>
+                        <td>${evento.lugar}</td>
+                        <td>${evento.capacidad}</td>
+                        <td>
+                            <div style="display: flex; gap: 5px; align-items: center;">
+                                <span>${evento.inscritos}/${evento.capacidad}</span>
+                                <div style="width: 80px; background: #eee; height: 6px; border-radius: 3px; overflow: hidden;">
+                                    <div style="width: ${Math.min(porcentaje, 100)}%; background: var(--oro); height: 100%;"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn btn-secondary" onclick="editarEvento(${evento.id})">Editar</button>
+                                <button class="btn" onclick="eliminarEvento(${evento.id})" style="background: #dc3545; color: white;">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function abrirModalNuevo() {
+            eventoEditando = null;
+            document.getElementById('modal-title').textContent = '+ Nuevo Evento';
+            document.getElementById('evento-form').reset();
+            new Modal('modal-evento-form').open();
+        }
+
+        function editarEvento(id) {
+            const evento = eventos.find(e => e.id === id);
+            if (!evento) return;
+
+            eventoEditando = id;
+            document.getElementById('modal-title').textContent = '✏️ Editar Evento';
+            document.getElementById('evento-titulo').value = evento.titulo;
+            document.getElementById('evento-descripcion').value = evento.descripcion;
+            document.getElementById('evento-fecha').value = evento.fecha;
+            document.getElementById('evento-hora').value = evento.hora;
+            document.getElementById('evento-lugar').value = evento.lugar;
+            document.getElementById('evento-capacidad').value = evento.capacidad;
+            document.getElementById('evento-imagen').value = evento.imagen;
+
+            new Modal('modal-evento-form').open();
+        }
+
+        function cerrarModalEvento() {
+            new Modal('modal-evento-form').close();
+        }
+
+        async function eliminarEvento(id) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este evento?')) return;
+
+            try {
+                await apiRequest(`/eventos/${id}`, { method: 'DELETE' });
+                showAlert('Evento eliminado exitosamente', 'success');
+                cargarEventos();
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        }
+
+        document.getElementById('evento-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                titulo: document.getElementById('evento-titulo').value,
+                descripcion: document.getElementById('evento-descripcion').value,
+                fecha: document.getElementById('evento-fecha').value,
+                hora: document.getElementById('evento-hora').value,
+                lugar: document.getElementById('evento-lugar').value,
+                capacidad: parseInt(document.getElementById('evento-capacidad').value),
+                imagen: document.getElementById('evento-imagen').value
+            };
+
+            try {
+                if (eventoEditando) {
+                    await apiRequest(`/eventos/${eventoEditando}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(formData)
+                    });
+                    showAlert('Evento actualizado exitosamente', 'success');
+                } else {
+                    await apiRequest('/eventos', {
+                        method: 'POST',
+                        body: JSON.stringify(formData)
+                    });
+                    showAlert('Evento creado exitosamente', 'success');
+                }
+
+                cerrarModalEvento();
+                cargarEventos();
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        });
+
+        document.getElementById('btn-nuevo-evento').addEventListener('click', abrirModalNuevo);
+
+        cargarEventos();
+    </script>
+</body>
+</html>

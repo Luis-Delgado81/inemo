@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrativo - INEMO</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav>
+        <div class="navbar-container">
+            <a href="/" class="logo">
+                <span>🎓</span>
+                <span>INEMO ADMIN</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="contactos.html">Contactos</a></li>
+            </ul>
+            <div class="nav-user"></div>
+        </div>
+    </nav>
+
+    <section>
+        <div class="container">
+            <h1 class="section-title">📊 Panel Administrativo INEMO</h1>
+
+            <div id="stats" class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 40px;">
+                <div class="card" style="text-align: center;">
+                    <p style="font-size: 32px; margin-bottom: 10px; color: var(--oro);">📰</p>
+                    <p style="font-weight: 600; color: var(--vinotinto); font-size: 18px;" id="total-noticias">0</p>
+                    <p style="color: var(--texto-claro);">Noticias Publicadas</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <p style="font-size: 32px; margin-bottom: 10px; color: var(--oro);">🎪</p>
+                    <p style="font-weight: 600; color: var(--vinotinto); font-size: 18px;" id="total-eventos">0</p>
+                    <p style="color: var(--texto-claro);">Eventos Registrados</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <p style="font-size: 32px; margin-bottom: 10px; color: var(--oro);">✉️</p>
+                    <p style="font-weight: 600; color: var(--vinotinto); font-size: 18px;" id="total-contactos">0</p>
+                    <p style="color: var(--texto-claro);">Mensajes Recibidos</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <p style="font-size: 32px; margin-bottom: 10px; color: var(--oro);">👤</p>
+                    <p style="font-weight: 600; color: var(--vinotinto); font-size: 18px;" id="usuario-nombre">Admin</p>
+                    <p style="color: var(--texto-claro);">Usuario Conectado</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">¡Bienvenido al Panel de Control!</h2>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>📰 Gestionar Noticias</h3>
+                    <p>Crea, edita y elimina noticias. Mantén a la comunidad informada con contenido relevante.</p>
+                    <a href="noticias.html" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Ir a Noticias</a>
+                </div>
+                <div class="card">
+                    <h3>🎪 Gestionar Eventos</h3>
+                    <p>Administra los eventos de INEMO, incluyendo fechas, horarios y capacidades.</p>
+                    <a href="eventos.html" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Ir a Eventos</a>
+                </div>
+                <div class="card">
+                    <h3>✉️ Mensajes de Contacto</h3>
+                    <p>Revisa los mensajes recibidos de visitantes y gestiona tu comunicación.</p>
+                    <a href="contactos.html" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Ver Contactos</a>
+                </div>
+                <div class="card">
+                    <h3>⚙️ Configuración</h3>
+                    <p>Personaliza la información de contacto y otros parámetros del sitio.</p>
+                    <button class="btn btn-secondary" style="width: 100%; margin-top: 15px; cursor: not-allowed; opacity: 0.6;">Próximamente</button>
+                </div>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 60px;">Últimas Noticias</h2>
+            <div style="background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px var(--sombra);">
+                <div id="ultimas-noticias" style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="loading"><div class="spinner"></div>Cargando...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2026 INEMO - Panel Administrativo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        // Verificar autenticación
+        const user = requireAdmin();
+
+        async function cargarEstadisticas() {
+            try {
+                const noticias = await apiRequest('/noticias');
+                const eventos = await apiRequest('/eventos');
+                const contactos = await apiRequest('/contacto');
+
+                document.getElementById('total-noticias').textContent = noticias.length;
+                document.getElementById('total-eventos').textContent = eventos.length;
+                document.getElementById('total-contactos').textContent = contactos.length;
+                document.getElementById('usuario-nombre').textContent = user.nombre;
+
+                // Mostrar últimas noticias
+                const container = document.getElementById('ultimas-noticias');
+                if (noticias.length === 0) {
+                    container.innerHTML = '<p>No hay noticias publicadas.</p>';
+                } else {
+                    container.innerHTML = noticias.slice(0, 3).map(n => `
+                        <div style="padding: 15px; background: var(--fondo); border-radius: 6px; border-left: 4px solid var(--oro);">
+                            <p><strong>${n.titulo}</strong></p>
+                            <p style="font-size: 14px; color: var(--texto-claro); margin: 5px 0;">
+                                📅 ${formatDate(n.fecha)} | ✍️ ${n.autor}
+                            </p>
+                            <p style="font-size: 13px; margin: 5px 0;">${n.contenido.substring(0, 80)}...</p>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error al cargar estadísticas:', error);
+            }
+        }
+
+        cargarEstadisticas();
+    </script>
+</body>
+</html>

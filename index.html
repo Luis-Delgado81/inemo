@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INEMO - Instituto Enseñanza Moderna</title>
+    <link rel="stylesheet" href="frontend/css/styles.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav>
+        <div class="navbar-container">
+            <a href="/" class="logo" onclick="navegarA('inicio'); return false;">
+                <span>🎓</span>
+                <span>INEMO</span>
+            </a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#" onclick="navegarA('inicio'); return false;">Inicio</a></li>
+                <li><a href="#" onclick="navegarA('noticias'); return false;">Noticias</a></li>
+                <li><a href="#" onclick="navegarA('eventos'); return false;">Eventos</a></li>
+                <li><a href="#" onclick="navegarA('nosotros'); return false;">Nosotros</a></li>
+                <li><a href="#" onclick="navegarA('contacto'); return false;">Contacto</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <div class="nav-user"></div>
+        </div>
+    </nav>
+
+    <!-- PÁGINA: INICIO -->
+    <div id="page-inicio" class="page active">
+        <!-- Slider de Eventos FULL WIDTH Futurista -->
+        <div class="slider-hero-fullwidth">
+            <div id="eventos-slider" class="slider-container-full">
+                <div class="slider-content">
+                    <div class="slider-item active">
+                        <div class="slider-image" id="slider-img"></div>
+                        <div class="slider-overlay-full"></div>
+                        <div class="slider-info">
+                            <h2 id="slider-titulo">Cargando evento...</h2>
+                            <p id="slider-fecha" style="margin: 10px 0;">📅</p>
+                            <p id="slider-ubicacion" style="margin: 10px 0;">📍</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-btn-full slider-prev-full" onclick="cambiarEvento(-1)">❮</button>
+                <button class="slider-btn-full slider-next-full" onclick="cambiarEvento(1)">❯</button>
+            </div>
+        </div>
+
+        <div class="hero">
+            <div class="hero-content">
+                <h1>INEMO</h1>
+                <p>Instituto Enseñanza Moderna - Transformando la educación</p>
+                <div class="hero-buttons">
+                    <button onclick="navegarA('noticias')" class="btn btn-primary">📰 Últimas Noticias</button>
+                    <button onclick="navegarA('eventos')" class="btn btn-secondary">🎪 Próximos Eventos</button>
+                    <button onclick="navegarA('contacto')" class="btn btn-outline">✉️ Contáctenos</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Noticias Recientes -->
+        <section style="background: var(--fondo); padding: 60px 20px;">
+            <div class="container">
+                <h2 class="section-title">📰 Noticias Recientes</h2>
+                <div id="noticias-recientes" class="cards-grid">
+                    <div class="loading"><div class="spinner"></div>Cargando noticias...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Características -->
+        <section>
+            <div class="container">
+                <h2 class="section-title">¿Por qué INEMO?</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>🎯 Educación de Calidad</h3>
+                        <p>Ofrecemos programas educativos innovadores.</p>
+                    </div>
+                    <div class="card" style="cursor: pointer; border: 2px solid var(--oro); box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);" onclick="navegarA('docentes')">
+                        <h3>👨‍🏫 Docentes Especializados</h3>
+                        <p>Ve nuestro equipo de expertos comprometidos con la excelencia.</p>
+                        <small style="color: var(--vinotinto); font-weight: 600;">Click para ver más →</small>
+                    </div>
+                    <div class="card">
+                        <h3>💡 Innovación Tecnológica</h3>
+                        <p>Utilizamos tecnología para optimizar el aprendizaje.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PÁGINA: NOTICIAS -->
+    <div id="page-noticias" class="page">
+        <div class="container" style="padding: 40px 20px;">
+            <h1>📰 Noticias</h1>
+            <div id="noticias-admin" style="margin-bottom: 20px; display: none;">
+                <button onclick="abrirModalNoticia()" class="btn btn-primary">+ Crear Noticia</button>
+            </div>
+            <div id="noticias-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div class="loading"><div class="spinner"></div>Cargando...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA: EVENTOS -->
+    <div id="page-eventos" class="page">
+        <div class="container" style="padding: 40px 20px;">
+            <h1>🎪 Eventos</h1>
+            <div id="eventos-admin" style="margin-bottom: 20px; display: none;">
+                <button onclick="abrirModalEvento()" class="btn btn-primary">+ Crear Evento</button>
+            </div>
+            <div id="eventos-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div class="loading"><div class="spinner"></div>Cargando...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA: NOSOTROS -->
+    <div id="page-nosotros" class="page">
+        <div class="container" style="padding: 40px 20px;">
+            <h1>👥 Acerca de INEMO</h1>
+            <div style="background: white; padding: 30px; border-radius: 8px; margin-top: 20px;">
+                <h2 style="color: var(--vinotinto);">Nuestra Misión</h2>
+                <p>Proporcionar educación de calidad, innovadora e inclusiva que desarrolle competencias académicas y ciudadanas.</p>
+                <h2 style="color: var(--vinotinto); margin-top: 30px;">Nuestra Visión</h2>
+                <p>Ser reconocidos como una institución educativa líder en la región, distinguida por la excelencia académica.</p>
+            </div>
+            
+            <!-- Línea de Tiempo -->
+            <h2 style="color: var(--vinotinto); margin-top: 50px; margin-bottom: 30px;">📅 Línea de Tiempo</h2>
+            <div id="admin-timeline-btn" style="margin-bottom: 20px; display: none;">
+                <button onclick="abrirModalTimeline()" class="btn btn-primary">+ Agregar Hito</button>
+            </div>
+            <div id="timeline-lista" style="max-width: 600px; margin: 0 auto;">
+                <div class="loading"><div class="spinner"></div>Cargando línea de tiempo...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA: CONTACTO -->
+    <div id="page-contacto" class="page">
+        <div class="container" style="padding: 40px 20px;">
+            <h1>✉️ Contacto</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+                <div style="background: white; padding: 30px; border-radius: 8px;">
+                    <h3 style="color: var(--vinotinto); margin-top: 0;">Envíanos un mensaje</h3>
+                    <form id="contacto-form" onsubmit="enviarContacto(event)">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" id="contacto-nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="contacto-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mensaje</label>
+                            <textarea id="contacto-mensaje" required style="min-height: 120px;"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Enviar</button>
+                    </form>
+                </div>
+                <div style="background: white; padding: 30px; border-radius: 8px;">
+                    <h3 style="color: var(--vinotinto); margin-top: 0;">Información</h3>
+                    <p><strong>📞 Teléfono:</strong><br> +57 300 567 8901</p>
+                    <p><strong>📧 Email:</strong><br> contacto@inemo.edu.co</p>
+                    <p><strong>📍 Ubicación:</strong><br> Malambo, Atlántico, Colombia</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA: ADMIN -->
+    <div id="page-admin" class="page">
+        <div class="container" style="padding: 40px 20px;">
+            <h1>⚙️ Panel de Administración</h1>
+            <div style="background: var(--fondo); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                <p><strong style="color: var(--vinotinto);">Bienvenido,</strong> <span id="admin-user-name"></span></p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--vinotinto); margin-top: 0;">� Usuarios</h3>
+                    <button onclick="navegarA('admin-usuarios')" class="btn btn-primary" style="width: 100%;">Gestionar</button>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--vinotinto); margin-top: 0;">�📰 Noticias</h3>
+                    <button onclick="navegarA('admin-noticias')" class="btn btn-primary" style="width: 100%;">Gestionar</button>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--vinotinto); margin-top: 0;">🎪 Eventos</h3>
+                    <button onclick="navegarA('admin-eventos')" class="btn btn-primary" style="width: 100%;">Gestionar</button>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--vinotinto); margin-top: 0;">👨‍🏫 Docentes</h3>
+                    <button onclick="navegarA('admin-docentes')" class="btn btn-primary" style="width: 100%;">Gestionar</button>
+                </div>
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--vinotinto); margin-top: 0;">✉️ Contactos</h3>
+                    <button onclick="navegarA('admin-contactos')" class="btn btn-primary" style="width: 100%;">Ver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA: ADMIN NOTICIAS -->
+    <div id="page-admin-noticias" class="page">
+        <div class="container" style="padding: 40px 20px;">
+            <h1>📰 Gestionar Noticias</h1>
+            <button onclick="abrirModalNoticia()" class="btn btn-primary" style="margin-bottom: 20px;">+ Nueva Noticia</button>
+            <div class="table-responsive">
+                <table id="tabla-noticias">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Categoría</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="4" style="text-align: center;">Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA: ADMIN EVENTOS -->
+    <div id="page-admin-eventos" class="page">
+        <div class="container" style="padding: 40px 20px;">
+            <h1>🎪 Gestionar Eventos</h1>
+            <button onclick="abrirModalEvento()" class="btn btn-primary" style="margin-bottom: 20px;">+ Nuevo Evento</button>
+            <div class="table-responsive">
+                <table id="tabla-eventos">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="4" style="text-align: center;">Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA: ADMIN CONTACTOS -->
+    <div id="page-admin-contactos" class="page">
+        <div class="container" style="padding: 40px 20px;">
+            <h1>✉️ Gestionar Contactos</h1>
+            <div class="table-responsive">
+                <table id="tabla-contactos">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Asunto</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="5" style="text-align: center;">Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Noticia -->
+    <div id="modal-noticia" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="modal-noticia-titulo-h">Nueva Noticia</h2>
+            <form onsubmit="guardarNoticia(event)">
+                <input type="hidden" id="modal-noticia-id">
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="modal-noticia-titulo" required>
+                </div>
+                <div class="form-group">
+                    <label>Contenido</label>
+                    <textarea id="modal-noticia-contenido" required style="min-height: 150px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <input type="text" id="modal-noticia-categoria" placeholder="General">
+                </div>
+                <div class="form-group">
+                    <label>URL de Imagen</label>
+                    <input type="url" id="modal-noticia-imagen" placeholder="https://...">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" onclick="cerrarModal('modal-noticia')" class="btn btn-outline">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Evento -->
+    <div id="modal-evento" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="modal-evento-titulo-h">Nuevo Evento</h2>
+            <form onsubmit="guardarEvento(event)">
+                <input type="hidden" id="modal-evento-id">
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="modal-evento-titulo" required>
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="modal-evento-descripcion" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Fecha</label>
+                    <input type="date" id="modal-evento-fecha" required>
+                </div>
+                <div class="form-group">
+                    <label>Ubicación</label>
+                    <input type="text" id="modal-evento-ubicacion">
+                </div>
+                <div class="form-group">
+                    <label>URL de Imagen</label>
+                    <input type="url" id="modal-evento-imagen" placeholder="https://...">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" onclick="cerrarModal('modal-evento')" class="btn btn-outline">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PÁGINA: DOCENTES -->
+    <div id="page-docentes" class="page">
+        <div class="container" style="padding: 40px 20px;">
+            <h1>👨‍🏫 Planta de Docentes</h1>
+            <div id="docentes-admin" style="margin-bottom: 20px; display: none;">
+                <button onclick="abrirModalDocente()" class="btn btn-primary">+ Agregar Docente</button>
+            </div>
+            <div id="docentes-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div class="loading"><div class="spinner"></div>Cargando docentes...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA: ADMIN DOCENTES -->
+    <div id="page-admin-docentes" class="page">
+        <div class="container" style="padding: 40px 20px;">
+            <h1>👨‍🏫 Gestionar Docentes</h1>
+            <button onclick="abrirModalDocente()" class="btn btn-primary" style="margin-bottom: 20px;">+ Nuevo Docente</button>
+            <div class="table-responsive">
+                <table id="tabla-docentes">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Especialidad</th>
+                            <th>Email</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="4" style="text-align: center;">Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA: ADMIN USUARIOS -->
+    <div id="page-admin-usuarios" class="page">
+        <div class="container" style="padding: 40px 20px;">
+            <h1>👥 Gestionar Usuarios</h1>
+            <button onclick="abrirModalUsuario()" class="btn btn-primary" style="margin-bottom: 20px;">+ Nuevo Usuario</button>
+            <div class="table-responsive">
+                <table id="tabla-usuarios">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Nombre</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="6" style="text-align: center;">Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Timeline -->
+    <div id="modal-timeline" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Agregar Hito</h2>
+            <form onsubmit="guardarTimeline(event)">
+                <input type="hidden" id="modal-timeline-id">
+                <div class="form-group">
+                    <label>Año</label>
+                    <input type="number" id="modal-timeline-ano" min="1900" max="2100" required>
+                </div>
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="modal-timeline-titulo" required>
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="modal-timeline-descripcion" required></textarea>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" onclick="cerrarModal('modal-timeline')" class="btn btn-outline">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Docente -->
+    <div id="modal-docente" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="modal-docente-titulo-h">Nuevo Docente</h2>
+            <form onsubmit="guardarDocente(event)">
+                <input type="hidden" id="modal-docente-id">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="modal-docente-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Especialidad</label>
+                    <input type="text" id="modal-docente-especialidad" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="modal-docente-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" id="modal-docente-telefono">
+                </div>
+                <div class="form-group">
+                    <label>Foto URL</label>
+                    <input type="url" id="modal-docente-foto" placeholder="https://...">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" onclick="cerrarModal('modal-docente')" class="btn btn-outline">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Usuario -->
+    <div id="modal-usuario" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="modal-usuario-titulo-h">Nuevo Usuario</h2>
+            <form onsubmit="guardarUsuario(event)">
+                <input type="hidden" id="modal-usuario-id">
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="modal-usuario-username" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="modal-usuario-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="modal-usuario-password" required>
+                </div>
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="modal-usuario-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Rol</label>
+                    <select id="modal-usuario-role" required>
+                        <option value="">Seleccionar rol...</option>
+                        <option value="admin">Administrador</option>
+                        <option value="editor">Editor</option>
+                        <option value="usuario">Usuario</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" onclick="cerrarModal('modal-usuario')" class="btn btn-outline">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Footer Futurista -->
+    <footer style="background: linear-gradient(135deg, var(--vinotinto) 0%, var(--vinotinto-claro) 50%, var(--vinotinto) 100%); color: white; padding: 40px 20px; position: relative; overflow: hidden;">
+        <!-- Efecto de luz de fondo -->
+        <div style="position: absolute; top: -50%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+        
+        <div class="container" style="position: relative; z-index: 1;">
+            <!-- Línea decorativa superior -->
+            <div style="height: 2px; background: linear-gradient(90deg, transparent, var(--oro), transparent); margin-bottom: 30px;"></div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; align-items: center; text-align: center;">
+                
+                <!-- Horarios -->
+                <div style="padding: 0 15px; border-right: 1px solid rgba(212, 175, 55, 0.3);">
+                    <h4 style="color: var(--oro); margin-bottom: 12px; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">⏰ Horarios</h4>
+                    <p style="margin: 6px 0; font-size: 13px; line-height: 1.8;"><strong>Lun-Vie:</strong><br>08:00 - 17:00</p>
+                    <p style="margin: 6px 0; font-size: 13px; line-height: 1.8;"><strong>Sábado:</strong><br>09:00 - 13:00</p>
+                </div>
+
+                <!-- Ubicación con Mapa Futurista -->
+                <div style="position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 0 30px rgba(212, 175, 55, 0.4), inset 0 0 30px rgba(212, 175, 55, 0.15); border: 2px solid var(--oro); min-height: 120px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), rgba(212, 175, 55, 0.02));">
+                    <iframe width="100%" height="120" frameborder="0" style="border: none; display: block; filter: brightness(0.95);" src="https://maps.google.com/maps?q=Malambo,+Atlantico,+Colombia&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+                    <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--oro), var(--oro-claro)); color: var(--vinotinto); padding: 6px 16px; border-radius: 25px; font-size: 12px; font-weight: 700; box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5); text-transform: uppercase; letter-spacing: 0.5px;">
+                        📍 Malambo, Atlántico
+                    </div>
+                </div>
+
+                <!-- Contacto -->
+                <div style="padding: 0 15px; border-left: 1px solid rgba(212, 175, 55, 0.3);">
+                    <h4 style="color: var(--oro); margin-bottom: 12px; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">📞 Contacto</h4>
+                    <p style="margin: 6px 0; font-size: 13px; line-height: 1.8; word-break: break-all;">+57 300 567 8901</p>
+                    <p style="margin: 6px 0; font-size: 13px; line-height: 1.8; word-break: break-all;">contacto@inemo.edu.co</p>
+                </div>
+            </div>
+
+            <!-- Línea decorativa inferior -->
+            <div style="height: 2px; background: linear-gradient(90deg, transparent, var(--oro), transparent); margin: 25px 0;"></div>
+
+            <!-- Copyright -->
+            <div style="text-align: center; font-size: 12px; opacity: 0.9;">
+                <p style="margin: 0;">© 2026 <span style="color: var(--oro); font-weight: 700;">INEMO</span> - Instituto Enseñanza Moderna | Todos los derechos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="frontend/js/app.js"></script>
+    <script>
+        // Variables globales
+        const API = 'http://localhost:3000/api';
+
+        // Menú Hamburguesa
+        function toggleMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('nav-links');
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        }
+
+        // Cerrar menú al hacer click en un enlace
+        document.querySelectorAll('#nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('hamburger').classList.remove('active');
+                document.getElementById('nav-links').classList.remove('active');
+            });
+        });
+
+        // Sistema de enrutamiento
+        function navegarA(pagina) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const page = document.getElementById(`page-${pagina}`);
+            if (page) {
+                page.classList.add('active');
+                window.scrollTo(0, 0);
+                cargarPagina(pagina);
+            }
+        }
+
+        function cargarPagina(pagina) {
+            if (pagina === 'inicio') {
+                cargarEventosSlider();
+                cargarNoticiasRecientes();
+                cargarTimeline();
+                mostrarAdminBtn('eventos');
+            } else if (pagina === 'noticias') {
+                cargarNoticias();
+            } else if (pagina === 'eventos') {
+                cargarEventos();
+            } else if (pagina === 'nosotros') {
+                cargarTimeline();
+                mostrarAdminTimelineBtn();
+            } else if (pagina === 'docentes') {
+                cargarDocentes();
+                mostrarAdminDocentesBtn();
+            } else if (pagina === 'admin') {
+                if (!verificarAdmin()) return;
+                document.getElementById('admin-user-name').textContent = getUser()?.nombre || 'Usuario';
+            } else if (pagina === 'admin-noticias') {
+                if (!verificarAdmin()) return;
+                cargarAdminNoticias();
+            } else if (pagina === 'admin-eventos') {
+                if (!verificarAdmin()) return;
+                cargarAdminEventos();
+            } else if (pagina === 'admin-contactos') {
+                if (!verificarAdmin()) return;
+                cargarAdminContactos();
+            } else if (pagina === 'admin-docentes') {
+                if (!verificarAdmin()) return;
+                cargarAdminDocentes();
+            } else if (pagina === 'admin-usuarios') {
+                if (!verificarAdminOnly()) return;
+                cargarAdminUsuarios();
+            }
+        }
+
+        function verificarAdmin() {
+            const user = getUser();
+            if (!user || (user.role !== 'admin' && user.role !== 'editor')) {
+                alert('Debes iniciar sesión como administrador');
+                navegarA('inicio');
+                return false;
+            }
+            return true;
+        }
+
+        function verificarAdminOnly() {
+            const user = getUser();
+            if (!user || user.role !== 'admin') {
+                alert('Solo administradores pueden acceder a esta sección');
+                navegarA('inicio');
+                return false;
+            }
+            return true;
+        }
+
+        // Cargar datos
+        let eventosSlider = [];
+        let indiceEventoSlider = 0;
+
+        async function cargarEventosSlider() {
+            try {
+                const res = await fetch(`${API}/eventos`);
+                const data = await res.json();
+                eventosSlider = data.data || [];
+                indiceEventoSlider = 0;
+                if (eventosSlider.length > 0) {
+                    mostrarEventoSlider();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function mostrarEventoSlider() {
+            if (eventosSlider.length === 0) return;
+            const evento = eventosSlider[indiceEventoSlider];
+            document.getElementById('slider-img').style.backgroundImage = `url('${evento.imagen}')`;
+            document.getElementById('slider-titulo').textContent = evento.titulo;
+            document.getElementById('slider-fecha').textContent = '📅 ' + new Date(evento.fecha_evento).toLocaleDateString('es-CO');
+            document.getElementById('slider-ubicacion').textContent = '📍 ' + (evento.ubicacion || 'Por confirmar');
+        }
+
+        function cambiarEvento(direccion) {
+            indiceEventoSlider = (indiceEventoSlider + direccion + eventosSlider.length) % eventosSlider.length;
+            mostrarEventoSlider();
+        }
+
+        async function cargarNoticiasRecientes() {
+            try {
+                const res = await fetch(`${API}/noticias?limit=3`);
+                const data = await res.json();
+                const container = document.getElementById('noticias-recientes');
+                if (data.data?.length > 0) {
+                    container.innerHTML = data.data.map(n => `
+                        <div class="card">
+                            <img src="${n.imagen}" alt="" style="width:100%; height:200px; object-fit:cover; border-radius:4px; margin-bottom:10px;">
+                            <h3>${n.titulo}</h3>
+                            <p style="color: var(--texto-claro); font-size: 14px;">${new Date(n.fecha_creacion).toLocaleDateString('es-CO')}</p>
+                            <p>${n.contenido.substring(0, 100)}...</p>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function cargarNoticias() {
+            try {
+                const res = await fetch(`${API}/noticias?limit=20`);
+                const data = await res.json();
+                const container = document.getElementById('noticias-list');
+                if (data.data?.length > 0) {
+                    container.innerHTML = data.data.map(n => `
+                        <div class="card">
+                            <img src="${n.imagen}" alt="" style="width:100%; height:200px; object-fit:cover; border-radius:4px; margin-bottom:10px;">
+                            <h3>${n.titulo}</h3>
+                            <p style="color: var(--texto-claro); font-size: 14px;">${n.categoria} • ${new Date(n.fecha_creacion).toLocaleDateString('es-CO')}</p>
+                            <p>${n.contenido.substring(0, 150)}...</p>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p>No hay noticias</p>';
+                }
+                mostrarAdminBtn('noticias');
+            } catch (e) {
+                console.error(e);
+                document.getElementById('noticias-list').innerHTML = '<p>Error al cargar</p>';
+            }
+        }
+
+        async function cargarEventos() {
+            try {
+                const res = await fetch(`${API}/eventos`);
+                const data = await res.json();
+                const container = document.getElementById('eventos-list');
+                if (data.data?.length > 0) {
+                    container.innerHTML = data.data.map(e => `
+                        <div class="card">
+                            <img src="${e.imagen}" alt="" style="width:100%; height:200px; object-fit:cover; border-radius:4px; margin-bottom:10px;">
+                            <h3>${e.titulo}</h3>
+                            <p style="color: var(--texto-claro); font-size: 14px;">
+                                📅 ${new Date(e.fecha_evento).toLocaleDateString('es-CO')}<br>
+                                📍 ${e.ubicacion || 'Por confirmar'}
+                            </p>
+                            <p>${e.descripcion.substring(0, 100)}...</p>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p style="grid-column:1/-1;">No hay eventos</p>';
+                }
+                mostrarAdminBtn('eventos');
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Admin
+        async function cargarAdminNoticias() {
+            try {
+                const token = getToken();
+                const res = await fetch(`${API}/noticias?limit=100`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                const tbody = document.querySelector('#tabla-noticias tbody');
+                tbody.innerHTML = data.data?.map(n => `
+                    <tr>
+                        <td>${n.titulo}</td>
+                        <td>${n.categoria}</td>
+                        <td>${n.estado}</td>
+                        <td>
+                            <button onclick="editarNoticia(${n.id})" class="btn btn-small" style="background:#007bff; color:white; margin-right: 5px;">✏️ Editar</button>
+                            <button onclick="eliminarNoticia(${n.id})" class="btn btn-small" style="background:#dc3545; color:white;">✕ Eliminar</button>
+                        </td>
+                    </tr>
+                `).join('') || '<tr><td colspan="4">No hay noticias</td></tr>';
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function cargarAdminEventos() {
+            try {
+                const token = getToken();
+                const res = await fetch(`${API}/eventos?limit=100`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                const tbody = document.querySelector('#tabla-eventos tbody');
+                tbody.innerHTML = data.data?.map(e => `
+                    <tr>
+                        <td>${e.titulo}</td>
+                        <td>${new Date(e.fecha_evento).toLocaleDateString('es-CO')}</td>
+                        <td>${e.estado}</td>
+                        <td>
+                            <button onclick="editarEvento(${e.id})" class="btn btn-small" style="background:#007bff; color:white; margin-right: 5px;">✏️ Editar</button>
+                            <button onclick="eliminarEvento(${e.id})" class="btn btn-small" style="background:#dc3545; color:white;">✕ Eliminar</button>
+                        </td>
+                    </tr>
+                `).join('') || '<tr><td colspan="4">No hay eventos</td></tr>';
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function cargarAdminContactos() {
+            try {
+                const token = getToken();
+                const res = await fetch(`${API}/contacto?limit=100`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                const tbody = document.querySelector('#tabla-contactos tbody');
+                tbody.innerHTML = data.data?.map(c => `
+                    <tr>
+                        <td>${c.nombre}</td>
+                        <td>${c.email}</td>
+                        <td>${c.asunto}</td>
+                        <td>${new Date(c.fecha_creacion).toLocaleDateString('es-CO')}</td>
+                        <td>
+                            <button onclick="eliminarContacto(${c.id})" class="btn btn-small" style="background:#dc3545; color:white;">Eliminar</button>
+                        </td>
+                    </tr>
+                `).join('') || '<tr><td colspan="5">No hay contactos</td></tr>';
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function abrirModalNoticia() { 
+            document.getElementById('modal-noticia-id').value = '';
+            document.getElementById('modal-noticia-titulo-h').textContent = 'Nueva Noticia';
+            document.getElementById('modal-noticia-titulo').value = '';
+            document.getElementById('modal-noticia-contenido').value = '';
+            document.getElementById('modal-noticia-categoria').value = 'General';
+            document.getElementById('modal-noticia-imagen').value = '';
+            document.getElementById('modal-noticia').classList.add('active'); 
+        }
+        
+        async function editarNoticia(id) {
+            try {
+                const token = getToken();
+                const res = await fetch(`${API}/noticias/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const result = await res.json();
+                const noticia = result.data || result;
+                
+                document.getElementById('modal-noticia-id').value = id;
+                document.getElementById('modal-noticia-titulo-h').textContent = 'Editar Noticia';
+                document.getElementById('modal-noticia-titulo').value = noticia.titulo;
+                document.getElementById('modal-noticia-contenido').value = noticia.contenido;
+                document.getElementById('modal-noticia-categoria').value = noticia.categoria;
+                document.getElementById('modal-noticia-imagen').value = noticia.imagen;
+                document.getElementById('modal-noticia').classList.add('active');
+            } catch (e) {
+                alert('Error cargando noticia: ' + e.message);
+            }
+        }
+
+        // Guardar datos
+        async function guardarNoticia(e) {
+            e.preventDefault();
+            const token = getToken();
+            if (!token) { alert('Inicia sesión'); return; }
+
+            const id = document.getElementById('modal-noticia-id').value;
+            const noticia = {
+                titulo: document.getElementById('modal-noticia-titulo').value,
+                contenido: document.getElementById('modal-noticia-contenido').value,
+                categoria: document.getElementById('modal-noticia-categoria').value || 'General',
+                imagen: document.getElementById('modal-noticia-imagen').value || 'https://via.placeholder.com/600x400?text=Noticia'
+            };
+
+            try {
+                const url = id ? `${API}/noticias/${id}` : `${API}/noticias`;
+                const method = id ? 'PUT' : 'POST';
+                
+                const res = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(noticia)
+                });
+                if (res.ok) {
+                    showAlert(id ? '✓ Noticia actualizada' : '✓ Noticia creada', 'success');
+                    cerrarModal('modal-noticia');
+                    cargarAdminNoticias();
+                } else {
+                    const error = await res.json();
+                    showAlert(error.error || 'Error', 'error');
+                }
+            } catch (e) {
+                showAlert('Error: ' + e.message, 'error');
+            }
+        }
+
+        function abrirModalEvento() { 
+            document.getElementById('modal-evento-id').value = '';
+            document.getElementById('modal-evento-titulo-h').textContent = 'Nuevo Evento';
+            document.getElementById('modal-evento-titulo').value = '';
+            document.getElementById('modal-evento-descripcion').value = '';
+            document.getElementById('modal-evento-fecha').value = '';
+            document.getElementById('modal-evento-ubicacion').value = '';
+            document.getElementById('modal-evento-imagen').value = '';
+            document.getElementById('modal-evento').classList.add('active'); 
+        }
+        
+        async function editarEvento(id) {
+            try {
+                const token = getToken();
+                const res = await fetch(`${API}/eventos/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const result = await res.json();
+                const evento = result.data || result;
+                
+                document.getElementById('modal-evento-id').value = id;
+                document.getElementById('modal-evento-titulo-h').textContent = 'Editar Evento';
+                document.getElementById('modal-evento-titulo').value = evento.titulo;
+                document.getElementById('modal-evento-descripcion').value = evento.descripcion;
+                document.getElementById('modal-evento-fecha').value = evento.fecha_evento.split('T')[0];
+                document.getElementById('modal-evento-ubicacion').value = evento.ubicacion;
+                document.getElementById('modal-evento-imagen').value = evento.imagen;
+                document.getElementById('modal-evento').classList.add('active');
+            } catch (e) {
+                alert('Error cargando evento: ' + e.message);
+            }
+        }
+
+        async function guardarEvento(e) {
+            e.preventDefault();
+            const token = getToken();
+            if (!token) { alert('Inicia sesión'); return; }
+
+            const id = document.getElementById('modal-evento-id').value;
+            const evento = {
+                titulo: document.getElementById('modal-evento-titulo').value,
+                descripcion: document.getElementById('modal-evento-descripcion').value,
+                fecha_evento: document.getElementById('modal-evento-fecha').value,
+                ubicacion: document.getElementById('modal-evento-ubicacion').value,
+                imagen: document.getElementById('modal-evento-imagen').value || 'https://via.placeholder.com/600x400?text=Evento'
+            };
+
+            try {
+                const url = id ? `${API}/eventos/${id}` : `${API}/eventos`;
+                const method = id ? 'PUT' : 'POST';
+                
+                const res = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(evento)
+                });
+                if (res.ok) {
+                    showAlert(id ? '✓ Evento actualizado' : '✓ Evento creado', 'success');
+                    cerrarModal('modal-evento');
+                    cargarAdminEventos();
+                } else {
+                    const error = await res.json();
+                    showAlert(error.error || 'Error', 'error');
+                }
+            } catch (e) {
+                showAlert('Error: ' + e.message, 'error');
+            }
+        }
+
+        async function enviarContacto(e) {
+            e.preventDefault();
+            const contacto = {
+                nombre: document.getElementById('contacto-nombre').value,
+                email: document.getElementById('contacto-email').value,
+                asunto: 'Consulta desde sitio web',
+                mensaje: document.getElementById('contacto-mensaje').value
+            };
+
+            try {
+                const res = await fetch(`${API}/contacto`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(contacto)
+                });
+                if (res.ok) {
+                    alert('Mensaje enviado');
+                    document.getElementById('contacto-form').reset();
+                }
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        // Eliminar
+        async function eliminarNoticia(id) {
+            if (!confirm('¿Eliminar?')) return;
+            const token = getToken();
+            try {
+                await fetch(`${API}/noticias/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                cargarAdminNoticias();
+            } catch (e) { alert('Error: ' + e.message); }
+        }
+
+        async function eliminarEvento(id) {
+            if (!confirm('¿Eliminar?')) return;
+            const token = getToken();
+            try {
+                await fetch(`${API}/eventos/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                cargarAdminEventos();
+            } catch (e) { alert('Error: ' + e.message); }
+        }
+
+        async function eliminarContacto(id) {
+            if (!confirm('¿Eliminar?')) return;
+            const token = getToken();
+            try {
+                await fetch(`${API}/contacto/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                cargarAdminContactos();
+            } catch (e) { alert('Error: ' + e.message); }
+        }
+
+        // Modales
+        function abrirModalNoticia() { document.getElementById('modal-noticia').classList.add('active'); }
+        function abrirModalEvento() { document.getElementById('modal-evento').classList.add('active'); }
+        function cerrarModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        function mostrarAdminBtn(tipo) {
+            const user = getUser();
+            if (user && (user.role === 'admin' || user.role === 'editor')) {
+                document.getElementById(`${tipo}-admin`).style.display = 'block';
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNavbar();
+            navegarA('inicio');
+        });
+
+        // Timeline
+        async function cargarTimeline() {
+            try {
+                const res = await fetch(`${API}/timeline`);
+                const data = await res.json();
+                const container = document.getElementById('timeline-lista');
+                if (data.data?.length > 0) {
+                    const sortedData = data.data.sort((a, b) => a.ano - b.ano);
+                    container.innerHTML = sortedData.map(t => `
+                        <div style="padding: 20px; background: white; border-left: 4px solid var(--vinotinto); margin-bottom: 15px; border-radius: 4px;">
+                            <h3 style="color: var(--vinotinto); margin-top: 0;">${t.ano}</h3>
+                            <h4>${t.titulo}</h4>
+                            <p>${t.descripcion}</p>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function cargarDocentes() {
+            try {
+                const res = await fetch(`${API}/docentes`);
+                const data = await res.json();
+                const container = document.getElementById('docentes-list');
+                if (data.data?.length > 0) {
+                    container.innerHTML = data.data.map(d => `
+                        <div class="card">
+                            <img src="${d.foto}" alt="${d.nombre}" style="width:100%; height:250px; object-fit:cover; border-radius:4px; margin-bottom:10px;">
+                            <h3>${d.nombre}</h3>
+                            <p style="color: var(--vinotinto); font-weight: 600;">${d.especialidad}</p>
+                            <p style="font-size: 13px; margin: 5px 0;">📧 ${d.email}</p>
+                            <p style="font-size: 13px; margin: 5px 0;">📞 ${d.telefono}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p style="grid-column:1/-1; text-align: center;">No hay docentes registrados</p>';
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function mostrarAdminTimelineBtn() {
+            const user = getUser();
+            if (user && (user.role === 'admin' || user.role === 'editor')) {
+                document.getElementById('admin-timeline-btn').style.display = 'block';
+            }
+        }
+
+        function mostrarAdminDocentesBtn() {
+            const user = getUser();
+            if (user && (user.role === 'admin' || user.role === 'editor')) {
+                document.getElementById('docentes-admin').style.display = 'block';
+            }
+        }
+
+        function abrirModalTimeline() {
+            document.getElementById('modal-timeline-id').value = '';
+            document.getElementById('modal-timeline-ano').value = new Date().getFullYear();
+            document.getElementById('modal-timeline-titulo').value = '';
+            document.getElementById('modal-timeline-descripcion').value = '';
+            document.getElementById('modal-timeline').classList.add('active');
+        }
+
+        async function guardarTimeline(e) {
+            e.preventDefault();
+            const token = getToken();
+            if (!token) { alert('Inicia sesión'); return; }
+
+            const id = document.getElementById('modal-timeline-id').value;
+            const timeline = {
+                ano: parseInt(document.getElementById('modal-timeline-ano').value),
+                titulo: document.getElementById('modal-timeline-titulo').value,
+                descripcion: document.getElementById('modal-timeline-descripcion').value
+            };
+
+            try {
+                const url = id ? `${API}/timeline/${id}` : `${API}/timeline`;
+                const method = id ? 'PUT' : 'POST';
+                const res = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(timeline)
+                });
+                if (res.ok) {
+                    showAlert(id ? '✓ Hito actualizado' : '✓ Hito creado', 'success');
+                    cerrarModal('modal-timeline');
+                    cargarTimeline();
+                }
+            } catch (e) {
+                showAlert('Error: ' + e.message, 'error');
+            }
+        }
+
+        function abrirModalDocente() {
+            document.getElementById('modal-docente-id').value = '';
+            document.getElementById('modal-docente-titulo-h').textContent = 'Nuevo Docente';
+            document.getElementById('modal-docente-nombre').value = '';
+            document.getElementById('modal-docente-especialidad').value = '';
+            document.getElementById('modal-docente-email').value = '';
+            document.getElementById('modal-docente-telefono').value = '';
+            document.getElementById('modal-docente-foto').value = '';
+            document.getElementById('modal-docente').classList.add('active');
+        }
+
+        async function editarDocente(id) {
+            try {
+                const token = getToken();
+                const res = await fetch(`${API}/docentes/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const result = await res.json();
+                const docente = result.data || result;
+                document.getElementById('modal-docente-id').value = id;
+                document.getElementById('modal-docente-titulo-h').textContent = 'Editar Docente';
+                document.getElementById('modal-docente-nombre').value = docente.nombre;
+                document.getElementById('modal-docente-especialidad').value = docente.especialidad;
+                document.getElementById('modal-docente-email').value = docente.email;
+                document.getElementById('modal-docente-telefono').value = docente.telefono;
+                document.getElementById('modal-docente-foto').value = docente.foto;
+                document.getElementById('modal-docente').classList.add('active');
+            } catch (e) {
+                showAlert('Error cargando docente: ' + e.message, 'error');
+            }
+        }
+
+        async function guardarDocente(e) {
+            e.preventDefault();
+            const token = getToken();
+            if (!token) { alert('Inicia sesión'); return; }
+
+            const id = document.getElementById('modal-docente-id').value;
+            const docente = {
+                nombre: document.getElementById('modal-docente-nombre').value,
+                especialidad: document.getElementById('modal-docente-especialidad').value,
+                email: document.getElementById('modal-docente-email').value,
+                telefono: document.getElementById('modal-docente-telefono').value,
+                foto: document.getElementById('modal-docente-foto').value || 'https://via.placeholder.com/300x400?text=Docente'
+            };
+
+            try {
+                const url = id ? `${API}/docentes/${id}` : `${API}/docentes`;
+                const method = id ? 'PUT' : 'POST';
+                const res = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(docente)
+                });
+                if (res.ok) {
+                    showAlert(id ? '✓ Docente actualizado' : '✓ Docente agregado', 'success');
+                    cerrarModal('modal-docente');
+                    cargarAdminDocentes();
+                    cargarDocentes();
+                } else {
+                    const error = await res.json();
+                    showAlert(error.error || 'Error', 'error');
+                }
+            } catch (e) {
+                showAlert('Error: ' + e.message, 'error');
+            }
+        }
+
+        async function cargarAdminDocentes() {
+            try {
+                const token = getToken();
+                const res = await fetch(`${API}/docentes`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                const tbody = document.querySelector('#tabla-docentes tbody');
+                tbody.innerHTML = data.data?.map(d => `
+                    <tr>
+                        <td>${d.nombre}</td>
+                        <td>${d.especialidad}</td>
+                        <td>${d.email}</td>
+                        <td>
+                            <button onclick="editarDocente(${d.id})" class="btn btn-small" style="background:#007bff; color:white; margin-right: 5px;">✏️ Editar</button>
+                            <button onclick="eliminarDocente(${d.id})" class="btn btn-small" style="background:#dc3545; color:white;">✕ Eliminar</button>
+                        </td>
+                    </tr>
+                `).join('') || '<tr><td colspan="4">No hay docentes</td></tr>';
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function eliminarDocente(id) {
+            if (!confirm('¿Eliminar docente?')) return;
+            const token = getToken();
+            try {
+                await fetch(`${API}/docentes/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                cargarAdminDocentes();
+                cargarDocentes();
+            } catch (e) { showAlert('Error: ' + e.message, 'error'); }
+        }
+
+        // CRUD USUARIOS
+        async function cargarAdminUsuarios() {
+            try {
+                const token = getToken();
+                const res = await fetch(`${API}/usuarios`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await res.json();
+                const tbody = document.getElementById('tabla-usuarios').querySelector('tbody');
+                tbody.innerHTML = data.data?.map(u => `
+                    <tr>
+                        <td>${u.username}</td>
+                        <td>${u.email}</td>
+                        <td>${u.nombre}</td>
+                        <td><span style="background: ${u.role === 'admin' ? '#dc3545' : u.role === 'editor' ? '#007bff' : '#28a745'}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">${u.role.toUpperCase()}</span></td>
+                        <td><span style="background: ${u.estado === 'activo' ? '#28a745' : '#dc3545'}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">${u.estado.toUpperCase()}</span></td>
+                        <td>
+                            <button onclick="editarUsuario(${u.id})" class="btn btn-small" style="background:#007bff; color:white; margin-right: 5px;">✏️ Editar</button>
+                            <button onclick="eliminarUsuario(${u.id})" class="btn btn-small" style="background:#dc3545; color:white;">✕ Eliminar</button>
+                        </td>
+                    </tr>
+                `).join('') || '<tr><td colspan="6">No hay usuarios</td></tr>';
+            } catch (e) { console.error(e); }
+        }
+
+        function abrirModalUsuario(id = null) {
+            if (id) {
+                document.getElementById('modal-usuario-titulo-h').textContent = 'Editar Usuario';
+                document.getElementById('modal-usuario-id').value = id;
+                document.getElementById('modal-usuario-password').removeAttribute('required');
+            } else {
+                document.getElementById('modal-usuario-titulo-h').textContent = 'Nuevo Usuario';
+                document.getElementById('modal-usuario-id').value = '';
+                document.getElementById('modal-usuario-password').setAttribute('required', 'required');
+                document.getElementById('modal-usuario-username').value = '';
+                document.getElementById('modal-usuario-email').value = '';
+                document.getElementById('modal-usuario-password').value = '';
+                document.getElementById('modal-usuario-nombre').value = '';
+                document.getElementById('modal-usuario-role').value = '';
+            }
+            document.getElementById('modal-usuario').classList.add('active');
+        }
+
+        async function editarUsuario(id) {
+            const token = getToken();
+            try {
+                const res = await fetch(`${API}/usuarios/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const u = await res.json();
+                document.getElementById('modal-usuario-id').value = u.id;
+                document.getElementById('modal-usuario-username').value = u.username;
+                document.getElementById('modal-usuario-email').value = u.email;
+                document.getElementById('modal-usuario-nombre').value = u.nombre;
+                document.getElementById('modal-usuario-role').value = u.role;
+                document.getElementById('modal-usuario-password').value = '';
+                document.getElementById('modal-usuario-titulo-h').textContent = 'Editar Usuario';
+                document.getElementById('modal-usuario-password').removeAttribute('required');
+                document.getElementById('modal-usuario').classList.add('active');
+            } catch (e) { showAlert('Error: ' + e.message, 'error'); }
+        }
+
+        async function guardarUsuario(event) {
+            event.preventDefault();
+            const token = getToken();
+            const id = document.getElementById('modal-usuario-id').value;
+            const datos = {
+                username: document.getElementById('modal-usuario-username').value,
+                email: document.getElementById('modal-usuario-email').value,
+                password: document.getElementById('modal-usuario-password').value,
+                nombre: document.getElementById('modal-usuario-nombre').value,
+                role: document.getElementById('modal-usuario-role').value
+            };
+
+            try {
+                const metodo = id ? 'PUT' : 'POST';
+                const url = id ? `${API}/usuarios/${id}` : `${API}/usuarios`;
+                const payload = id ? { nombre: datos.nombre, email: datos.email, role: datos.role, estado: 'activo' } : datos;
+                
+                const res = await fetch(url, {
+                    method: metodo,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    cargarAdminUsuarios();
+                    cerrarModal('modal-usuario');
+                    showAlert(id ? 'Usuario actualizado' : 'Usuario creado', 'success');
+                } else {
+                    const error = await res.json();
+                    showAlert('Error: ' + error.error, 'error');
+                }
+            } catch (e) { showAlert('Error: ' + e.message, 'error'); }
+        }
+
+        async function eliminarUsuario(id) {
+            if (!confirm('¿Eliminar usuario? Esta acción no se puede deshacer.')) return;
+            const token = getToken();
+            try {
+                const res = await fetch(`${API}/usuarios/${id}`, { 
+                    method: 'DELETE', 
+                    headers: { 'Authorization': `Bearer ${token}` } 
+                });
+                if (res.ok) {
+                    cargarAdminUsuarios();
+                    showAlert('Usuario eliminado', 'success');
+                } else {
+                    const error = await res.json();
+                    showAlert('Error: ' + error.error, 'error');
+                }
+            } catch (e) { showAlert('Error: ' + e.message, 'error'); }
+        }
+
+        // Cerrar modales al hacer click afuera
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

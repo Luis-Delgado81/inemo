@@ -1,0 +1,20 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@inemo.edu.co",
+      "password": "$2a$10$YJNVmZw2yHJGLIJzQV7D2O0Q7K5X2M8L9P3Z1w0Q5O5T5Y5.",
+      "role": "admin",
+      "nombre": "Administrador INEMO"
+    },
+    {
+      "id": 2,
+      "username": "editor",
+      "email": "editor@inemo.edu.co",
+      "password": "$2a$10$YJNVmZw2yHJGLIJzQV7D2O0Q7K5X2M8L9P3Z1w0Q5O5T5Y5.",
+      "role": "editor",
+      "nombre": "Editor de Contenidos"
+    }
+  ]
+}

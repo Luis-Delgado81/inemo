@@ -1,0 +1,258 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║                    🎓 INEMO - Portal Web                                  ║
+║            Instituto Enseñanza Moderna - Malambo, Colombia                ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+═════════════════════════════════════════════════════════════════════════════
+📋 ACCESO RÁPIDO
+═════════════════════════════════════════════════════════════════════════════
+
+🌐 SITIO PÚBLICO
+   URL: http://localhost:3000/
+   Descripción: Portal público con noticias, eventos y contacto
+
+🔐 PANEL ADMINISTRATIVO
+   URL: http://localhost:3000/frontend/admin/
+   Usuario: admin
+   Contraseña: admin123
+
+═════════════════════════════════════════════════════════════════════════════
+👥 CREDENCIALES DE DEMO
+═════════════════════════════════════════════════════════════════════════════
+
+┌─ ADMINISTRADOR ───────────────────────────────────────┐
+│ Username: admin                                       │
+│ Password: admin123                                    │
+│ Email: admin@inemo.edu.co                            │
+│ Rol: admin (acceso total)                            │
+│ Permisos: Crear, editar, eliminar todo               │
+└───────────────────────────────────────────────────────┘
+
+┌─ EDITOR ──────────────────────────────────────────────┐
+│ Username: editor                                      │
+│ Password: editor123                                   │
+│ Email: editor@inemo.edu.co                           │
+│ Rol: editor (crear y editar)                         │
+│ Permisos: Crear y editar noticias/eventos            │
+└───────────────────────────────────────────────────────┘
+
+═════════════════════════════════════════════════════════════════════════════
+🚀 INICIO RÁPIDO
+═════════════════════════════════════════════════════════════════════════════
+
+1. Abre una terminal/cmd
+
+2. Navega a la carpeta:
+   cd d:\DESCARGAR\inemo
+
+3. Instala dependencias (primera vez):
+   cd backend
+   npm install
+
+4. Inicia el servidor:
+   npm start
+
+5. Abre en el navegador:
+   http://localhost:3000/
+
+═════════════════════════════════════════════════════════════════════════════
+📂 ESTRUCTURA PRINCIPAL
+═════════════════════════════════════════════════════════════════════════════
+
+inemo/
+├── backend/              Backend (Node.js + Express)
+│   ├── server.js        Servidor principal
+│   ├── routes/          APIs (noticias, eventos, contacto)
+│   └── database/        Datos JSON
+│
+├── frontend/            Frontend (HTML/CSS/JS)
+│   ├── pages/          Páginas públicas
+│   ├── admin/          Panel administrativo
+│   └── css/            Estilos y colores
+│
+├── index.html          Página principal
+├── README.md           Documentación completa
+├── GUIA_RAPIDA.md      Guía de 5 minutos
+├── MANUAL_ADMIN.md     Manual del panel admin
+└── ESTRUCTURA.md       Arquitectura del proyecto
+
+═════════════════════════════════════════════════════════════════════════════
+🎨 COLORES CORPORATIVOS
+═════════════════════════════════════════════════════════════════════════════
+
+Vinotinto (primario):
+   Claro:    #8b2e2e
+   Normal:   #5a1a1a ⬛
+   Oscuro:   #3d1111
+
+Oro (secundario):
+   Claro:    #e6c957
+   Normal:   #d4af37 🟨
+   Oscuro:   #b8941e
+
+Fondo:  #f8f6f1 (Crema suave)
+Texto:  #333 (Gris oscuro)
+
+═════════════════════════════════════════════════════════════════════════════
+📞 INFORMACIÓN DE CONTACTO INEMO
+═════════════════════════════════════════════════════════════════════════════
+
+Dirección:   Cra. 45 #123-45, Malambo, Atlántico, Colombia
+Teléfono:    +57 300 567 8901
+Email:       contacto@inemo.edu.co
+Horario:     Lunes a Viernes: 8:00 AM - 5:00 PM
+Ciudad:      Malambo
+Coordenadas: 11.0063° N, 74.7903° O
+
+═════════════════════════════════════════════════════════════════════════════
+✨ CARACTERÍSTICAS PRINCIPALES
+═════════════════════════════════════════════════════════════════════════════
+
+✓ Página de inicio con carrusel de eventos
+✓ Sección de noticias con búsqueda y filtros
+✓ Calendario de eventos con inscripción en línea
+✓ Información sobre la institución
+✓ Formulario de contacto con validación
+✓ Mapa interactivo de Google Maps
+✓ Panel administrativo completo
+✓ CRUD para noticias y eventos
+✓ Gestión de mensajes de contacto
+✓ Sistema de autenticación con JWT
+✓ Diseño responsivo (mobile, tablet, desktop)
+✓ Animaciones y transiciones profesionales
+
+═════════════════════════════════════════════════════════════════════════════
+📚 DOCUMENTACIÓN
+═════════════════════════════════════════════════════════════════════════════
+
+1. README.md
+   ➜ Documentación completa del proyecto
+   ➜ Instrucciones de instalación
+   ➜ Listado de todas las APIs
+
+2. GUIA_RAPIDA.md
+   ➜ Inicio en 5 minutos
+   ➜ Solución de problemas básicos
+   ➜ Personalización rápida
+
+3. MANUAL_ADMIN.md
+   ➜ Cómo usar el panel administrativo
+   ➜ Crear, editar, eliminar contenido
+   ➜ Gestionar usuarios
+
+4. ESTRUCTURA.md
+   ➜ Arquitectura del proyecto
+   ➜ Flujos de datos
+   ➜ Escalabilidad futura
+
+═════════════════════════════════════════════════════════════════════════════
+🔧 TECNOLOGÍAS
+═════════════════════════════════════════════════════════════════════════════
+
+Backend:
+  • Node.js v14+
+  • Express.js (framework web)
+  • JWT (autenticación)
+  • JSON (base de datos)
+
+Frontend:
+  • HTML5 (estructura)
+  • CSS3 (estilos + responsive)
+  • JavaScript ES6 (interactividad)
+  • Google Maps API (mapa)
+
+═════════════════════════════════════════════════════════════════════════════
+⚙️ PORT Y CONFIGURACIÓN
+═════════════════════════════════════════════════════════════════════════════
+
+Puerto de servidor:  3000
+URL local:           http://localhost:3000
+Node version:        14 o superior
+npm version:         6 o superior
+
+API Base URL:        http://localhost:3000/api
+
+═════════════════════════════════════════════════════════════════════════════
+🚨 TROUBLESHOOTING RÁPIDO
+═════════════════════════════════════════════════════════════════════════════
+
+❌ "Puerto 3000 ya en uso"
+   ✓ Cambiar puerto en backend/server.js (línea 7)
+
+❌ "Cannot find module"
+   ✓ cd backend && npm install
+
+❌ "No aparecen estilos"
+   ✓ Recarga la página (Ctrl+F5)
+
+❌ "No puedo iniciar sesión"
+   ✓ Verifica usuario/contraseña exactamente
+   ✓ Revisar archivo users.json
+
+❌ "El servidor se detuvo"
+   ✓ Ejecuta npm start nuevamente
+
+═════════════════════════════════════════════════════════════════════════════
+📋 CHECKLIST DE CONFIGURACIÓN
+═════════════════════════════════════════════════════════════════════════════
+
+□ Node.js instalado
+□ npm instalado
+□ Carpeta del proyecto descargada
+□ npm install ejecutado en backend/
+□ npm start funcionando
+□ http://localhost:3000 accesible
+□ Panel admin accesible
+□ Credenciales de demo funcionan
+□ Crear primera noticia
+□ Crear primer evento
+□ Probar inscripción a evento
+□ Revisar mensajes de contacto
+
+═════════════════════════════════════════════════════════════════════════════
+🎯 PRÓXIMOS PASOS
+═════════════════════════════════════════════════════════════════════════════
+
+1. Personalización:
+   • Cambiar colores corporativos
+   • Agregar logo de INEMO
+   • Actualizar información de contacto
+   • Cambiar credenciales de admin
+
+2. Contenido:
+   • Crear noticias de INEMO
+   • Publicar eventos reales
+   • Actualizar página "Nosotros"
+   • Configurar formulario de contacto
+
+3. Seguridad:
+   • Cambiar todas las contraseñas
+   • Implementar HTTPS
+   • Usar base de datos real
+   • Validar inputs del usuario
+
+4. Producción:
+   • Escoger hosting
+   • Configurar dominio
+   • Implementar email
+   • Hacer respaldos
+
+═════════════════════════════════════════════════════════════════════════════
+📞 SOPORTE
+═════════════════════════════════════════════════════════════════════════════
+
+Email:       contacto@inemo.edu.co
+Teléfono:    +57 300 567 8901
+Ubicación:   Malambo, Atlántico, Colombia
+
+═════════════════════════════════════════════════════════════════════════════
+
+Fecha de creación: Marzo 2026
+Versión: 1.0.0
+Licencia: INEMO 2026 ©
+
+Hecho con ❤️ para INEMO - Instituto Enseñanza Moderna
+
+═════════════════════════════════════════════════════════════════════════════

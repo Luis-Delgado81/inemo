@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Noticias - INEMO Admin</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav>
+        <div class="navbar-container">
+            <a href="/" class="logo">
+                <span>🎓</span>
+                <span>INEMO ADMIN</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="contactos.html">Contactos</a></li>
+            </ul>
+            <div class="nav-user"></div>
+        </div>
+    </nav>
+
+    <section>
+        <div class="container">
+            <h1 class="section-title">📰 Gestionar Noticias</h1>
+
+            <div id="alert-container"></div>
+
+            <div style="margin-bottom: 30px;">
+                <button class="btn btn-primary" id="btn-nueva-noticia">+ Crear Nueva Noticia</button>
+            </div>
+
+            <div style="background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px var(--sombra); overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Categoría</th>
+                            <th>Fecha</th>
+                            <th>Autor</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="noticias-tbody">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 30px;">
+                                <div class="loading"><div class="spinner"></div>Cargando...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para crear/editar noticia -->
+    <div id="modal-noticia-form" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="modal-close">×</button>
+            <h2 class="modal-title" id="modal-title">Nueva Noticia</h2>
+            <form id="noticia-form">
+                <div class="form-group">
+                    <label for="titulo">Título *</label>
+                    <input type="text" id="titulo" required>
+                </div>
+                <div class="form-group">
+                    <label for="contenido">Contenido *</label>
+                    <textarea id="contenido" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="imagen">URL de Imagen</label>
+                    <input type="url" id="imagen" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label for="categoria">Categoría</label>
+                    <select id="categoria">
+                        <option value="General">General</option>
+                        <option value="Becas">Becas</option>
+                        <option value="Programas">Programas</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar Noticia</button>
+                    <button type="button" class="btn btn-outline" onclick="cerrarModalNoticia()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2026 INEMO - Panel Administrativo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        requireAdmin();
+
+        let noticias = [];
+        let noticiaEditando = null;
+
+        async function cargarNoticias() {
+            try {
+                noticias = await apiRequest('/noticias');
+                mostrarNoticias();
+            } catch (error) {
+                showAlert('Error al cargar noticias: ' + error.message, 'error');
+            }
+        }
+
+        function mostrarNoticias() {
+            const tbody = document.getElementById('noticias-tbody');
+            
+            if (noticias.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 30px;">No hay noticias publicadas.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = noticias.map(noticia => `
+                <tr>
+                    <td>${noticia.titulo}</td>
+                    <td>${noticia.categoria}</td>
+                    <td>${formatDate(noticia.fecha)}</td>
+                    <td>${noticia.autor}</td>
+                    <td>
+                        <span style="background: ${noticia.estado === 'activo' ? '#d4edda' : '#fff3cd'}; color: ${noticia.estado === 'activo' ? '#155724' : '#856404'}; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                            ${noticia.estado}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-secondary" onclick="editarNoticia(${noticia.id})">Editar</button>
+                            <button class="btn" onclick="eliminarNoticia(${noticia.id})" style="background: #dc3545; color: white;">Eliminar</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function abrirModalNueva() {
+            noticiaEditando = null;
+            document.getElementById('modal-title').textContent = '+ Nueva Noticia';
+            document.getElementById('noticia-form').reset();
+            new Modal('modal-noticia-form').open();
+        }
+
+        function editarNoticia(id) {
+            const noticia = noticias.find(n => n.id === id);
+            if (!noticia) return;
+
+            noticiaEditando = id;
+            document.getElementById('modal-title').textContent = '✏️ Editar Noticia';
+            document.getElementById('titulo').value = noticia.titulo;
+            document.getElementById('contenido').value = noticia.contenido;
+            document.getElementById('imagen').value = noticia.imagen;
+            document.getElementById('categoria').value = noticia.categoria;
+
+            new Modal('modal-noticia-form').open();
+        }
+
+        function cerrarModalNoticia() {
+            new Modal('modal-noticia-form').close();
+        }
+
+        async function eliminarNoticia(id) {
+            if (!confirm('¿Estás seguro de que deseas eliminar esta noticia?')) return;
+
+            try {
+                await apiRequest(`/noticias/${id}`, { method: 'DELETE' });
+                showAlert('Noticia eliminada exitosamente', 'success');
+                cargarNoticias();
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        }
+
+        document.getElementById('noticia-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                titulo: document.getElementById('titulo').value,
+                contenido: document.getElementById('contenido').value,
+                imagen: document.getElementById('imagen').value,
+                categoria: document.getElementById('categoria').value
+            };
+
+            try {
+                if (noticiaEditando) {
+                    await apiRequest(`/noticias/${noticiaEditando}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(formData)
+                    });
+                    showAlert('Noticia actualizada exitosamente', 'success');
+                } else {
+                    await apiRequest('/noticias', {
+                        method: 'POST',
+                        body: JSON.stringify(formData)
+                    });
+                    showAlert('Noticia creada exitosamente', 'success');
+                }
+
+                cerrarModalNoticia();
+                cargarNoticias();
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        });
+
+        document.getElementById('btn-nueva-noticia').addEventListener('click', abrirModalNueva);
+
+        cargarNoticias();
+    </script>
+</body>
+</html>

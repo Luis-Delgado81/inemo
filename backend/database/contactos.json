@@ -1,0 +1,27 @@
+{
+  "contactos": [
+    {
+      "id": 1,
+      "nombre": "Juan Pérez",
+      "email": "juan@example.com",
+      "telefono": "+573001234567",
+      "asunto": "Consulta sobre becas",
+      "mensaje": "Quiero información sobre los programas de becas disponibles.",
+      "fecha": "2026-03-07",
+      "leido": false,
+      "respondido": false
+    }
+  ],
+  "configuracion": {
+    "correo_soporte": "contacto@inemo.edu.co",
+    "telefono": "+573005678901",
+    "direccion": "Cra. 45 #123-45, Malambo, Atlántico, Colombia",
+    "horario": "Lunes a Viernes: 8:00 AM - 5:00 PM",
+    "ciudad": "Malambo",
+    "pais": "Colombia",
+    "coordenadas": {
+      "lat": 11.0063,
+      "lng": -74.7903
+    }
+  }
+}

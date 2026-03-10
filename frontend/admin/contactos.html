@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensajes de Contacto - INEMO Admin</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav>
+        <div class="navbar-container">
+            <a href="/" class="logo">
+                <span>🎓</span>
+                <span>INEMO ADMIN</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="contactos.html">Contactos</a></li>
+            </ul>
+            <div class="nav-user"></div>
+        </div>
+    </nav>
+
+    <section>
+        <div class="container">
+            <h1 class="section-title">✉️ Mensajes de Contacto</h1>
+
+            <div style="background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px var(--sombra); overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Asunto</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contactos-tbody">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 30px;">
+                                <div class="loading"><div class="spinner"></div>Cargando...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para ver mensaje -->
+    <div id="modal-mensaje" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="modal-close">×</button>
+            <h2 class="modal-title">Detalles del Mensaje</h2>
+            <div id="modal-mensaje-body"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2026 INEMO - Panel Administrativo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        requireAdmin();
+
+        let contactos = [];
+
+        async function cargarContactos() {
+            try {
+                contactos = await apiRequest('/contacto');
+                mostrarContactos();
+            } catch (error) {
+                console.error('Error al cargar contactos:', error);
+                document.getElementById('contactos-tbody').innerHTML = `
+                    <tr><td colspan="7" style="text-align: center; color: #dc3545;">
+                        Error al cargar mensajes: ${error.message}
+                    </td></tr>
+                `;
+            }
+        }
+
+        function mostrarContactos() {
+            const tbody = document.getElementById('contactos-tbody');
+            
+            if (contactos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 30px;">No hay mensajes de contacto.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = contactos.map(contacto => {
+                const estado = contacto.leido ? '✓ Leído' : '● Nuevo';
+                const colorEstado = contacto.leido ? '#28a745' : '#ffc107';
+
+                return `
+                    <tr>
+                        <td>${contacto.nombre}</td>
+                        <td><a href="mailto:${contacto.email}" style="color: var(--vinotinto); text-decoration: none;">${contacto.email}</a></td>
+                        <td>${contacto.telefono || '-'}</td>
+                        <td>${contacto.asunto}</td>
+                        <td>${formatDate(contacto.fecha)}</td>
+                        <td style="color: ${colorEstado}; font-weight: 600;">${estado}</td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn btn-secondary" onclick="verMensaje(${contacto.id})">Ver</button>
+                                <button class="btn" onclick="eliminarContacto(${contacto.id})" style="background: #dc3545; color: white;">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function verMensaje(id) {
+            const contacto = contactos.find(c => c.id === id);
+            if (!contacto) return;
+
+            // Marcar como leído
+            if (!contacto.leido) {
+                try {
+                    await apiRequest(`/contacto/${id}/leer`, { method: 'PUT' });
+                    contacto.leido = true;
+                    mostrarContactos();
+                } catch (error) {
+                    console.error('Error al marcar como leído:', error);
+                }
+            }
+
+            const modal = new Modal('modal-mensaje');
+            document.getElementById('modal-mensaje-body').innerHTML = `
+                <div style="background: var(--fondo); padding: 20px; border-radius: 6px;">
+                    <h3 style="color: var(--vinotinto);">${contacto.asunto}</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; font-size: 14px;">
+                        <div>
+                            <strong>Nombre:</strong><br>
+                            ${contacto.nombre}
+                        </div>
+                        <div>
+                            <strong>Correo:</strong><br>
+                            <a href="mailto:${contacto.email}" style="color: var(--vinotinto);">${contacto.email}</a>
+                        </div>
+                        <div>
+                            <strong>Teléfono:</strong><br>
+                            ${contacto.telefono || '-'}
+                        </div>
+                        <div>
+                            <strong>Fecha:</strong><br>
+                            ${formatDate(contacto.fecha)}
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; border-top: 1px solid var(--borde); padding-top: 20px;">
+                        <strong style="display: block; margin-bottom: 10px;">Mensaje:</strong>
+                        <p style="line-height: 1.8; color: var(--texto);">${contacto.mensaje}</p>
+                    </div>
+                    <div style="margin-top: 20px; display: flex; gap: 10px;">
+                        <a href="mailto:${contacto.email}" class="btn btn-primary">Responder por Email</a>
+                        <button class="btn btn-outline" onclick="cerrarModalMensaje()">Cerrar</button>
+                    </div>
+                </div>
+            `;
+            modal.open();
+        }
+
+        function cerrarModalMensaje() {
+            new Modal('modal-mensaje').close();
+        }
+
+        async function eliminarContacto(id) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este mensaje?')) return;
+
+            try {
+                await apiRequest(`/contacto/${id}`, { method: 'DELETE' });
+                showAlert('Mensaje eliminado exitosamente', 'success');
+                cargarContactos();
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        }
+
+        cargarContactos();
+    </script>
+</body>
+</html>

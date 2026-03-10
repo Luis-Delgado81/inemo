@@ -1,0 +1,43 @@
+{
+  "eventos": [
+    {
+      "id": 1,
+      "titulo": "Conferencia: El Futuro de la Educación",
+      "descripcion": "Únete a nosotros en esta conferencia sobre las nuevas metodologías educativas y cómo la tecnología está transformando el aprendizaje.",
+      "imagen": "https://via.placeholder.com/600x400?text=Conferencia+Educacion",
+      "fecha": "2026-03-20",
+      "hora": "10:00 AM",
+      "lugar": "Auditorio INEMO - Malambo, Colombia",
+      "capacidad": 200,
+      "inscritos": 45,
+      "estado": "proximos",
+      "inscripcion": "abierta"
+    },
+    {
+      "id": 2,
+      "titulo": "Taller de Programación Web",
+      "descripcion": "Aprende HTML, CSS y JavaScript con nuestros expertos. Ideal para estudiantes que desean iniciar en desarrollo web.",
+      "imagen": "https://via.placeholder.com/600x400?text=Taller+Web",
+      "fecha": "2026-03-25",
+      "hora": "2:00 PM",
+      "lugar": "Sala de Informática INEMO",
+      "capacidad": 30,
+      "inscritos": 28,
+      "estado": "proximos",
+      "inscripcion": "casi_lleno"
+    },
+    {
+      "id": 3,
+      "titulo": "Jornada de Preparación ICFES",
+      "descripcion": "Prepárate para el examen de estado con nuestro equipo de docentes especializados.",
+      "imagen": "https://via.placeholder.com/600x400?text=Preparacion+ICFES",
+      "fecha": "2026-03-22",
+      "hora": "3:00 PM",
+      "lugar": "Aulas INEMO",
+      "capacidad": 100,
+      "inscritos": 67,
+      "estado": "proximos",
+      "inscripcion": "abierta"
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - INEMO</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDummyKeyFor Demo"></script>
+</head>
+<body>
+    <!-- Navegación -->
+    <nav>
+        <div class="navbar-container">
+            <a href="/" class="logo">
+                <span>🎓</span>
+                <span>INEMO</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Inicio</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+            <div class="nav-user"></div>
+        </div>
+    </nav>
+
+    <section style="padding-top: 40px;">
+        <div class="container">
+            <h1 class="section-title">✉️ Contáctenos</h1>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 60px; align-items: start;">
+                <!-- Formulario -->
+                <div>
+                    <h2 style="color: var(--vinotinto); margin-bottom: 20px;">Envíanos un Mensaje</h2>
+                    <div id="alert-container"></div>
+                    <form id="contacto-form">
+                        <div class="form-group">
+                            <label for="nombre">Nombre Completo *</label>
+                            <input type="text" id="nombre" name="nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Teléfono</label>
+                            <input type="tel" id="telefono" name="telefono">
+                        </div>
+                        <div class="form-group">
+                            <label for="asunto">Asunto *</label>
+                            <input type="text" id="asunto" name="asunto" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="mensaje">Mensaje *</label>
+                            <textarea id="mensaje" name="mensaje" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Enviar Mensaje</button>
+                    </form>
+                </div>
+
+                <!-- Información de Contacto -->
+                <div>
+                    <h2 style="color: var(--vinotinto); margin-bottom: 20px;">Información de Contacto</h2>
+                    <div class="card" style="margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 10px;">📍 Ubicación</h3>
+                        <p id="direccion-info">Cargando...</p>
+                    </div>
+                    <div class="card" style="margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 10px;">📞 Teléfono</h3>
+                        <p id="telefono-info">Cargando...</p>
+                    </div>
+                    <div class="card" style="margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 10px;">📧 Correo Electrónico</h3>
+                        <p id="email-info">Cargando...</p>
+                    </div>
+                    <div class="card">
+                        <h3 style="margin-bottom: 10px;">🕐 Horario de Atención</h3>
+                        <p id="horario-info">Cargando...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mapa -->
+            <h2 class="section-title">Ubicación en Malambo, Colombia</h2>
+            <div id="map" class="map-container" style="width: 100%; height: 500px; border-radius: 8px; margin-bottom: 40px;"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>🎓 INEMO</h4>
+                <p>Instituto Enseñanza Moderna - Transformando vidas a través de la educación de calidad.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Navegación</h4>
+                <a href="/">Inicio</a>
+                <a href="noticias.html">Noticias</a>
+                <a href="eventos.html">Eventos</a>
+                <a href="nosotros.html">Nosotros</a>
+                <a href="contacto.html">Contacto</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p id="footer-contacto" style="color: #fff;">Cargando información...</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 INEMO - Instituto Enseñanza Moderna. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        let config = {};
+
+        async function cargarInformacionContacto() {
+            try {
+                config = await apiRequest('/contacto/config');
+                
+                document.getElementById('direccion-info').innerHTML = `
+                    <strong>${config.direccion}</strong><br>
+                    ${config.ciudad}, ${config.pais}
+                `;
+                document.getElementById('telefono-info').innerHTML = `
+                    <a href="tel:${config.telefono}" style="color: var(--vinotinto); text-decoration: none;">
+                        ${config.telefono}
+                    </a>
+                `;
+                document.getElementById('email-info').innerHTML = `
+                    <a href="mailto:${config.correo_soporte}" style="color: var(--vinotinto); text-decoration: none;">
+                        ${config.correo_soporte}
+                    </a>
+                `;
+                document.getElementById('horario-info').textContent = config.horario;
+                
+                document.getElementById('footer-contacto').innerHTML = `
+                    📞 ${config.telefono}<br>
+                    📧 ${config.correo_soporte}<br>
+                    🕐 ${config.horario}
+                `;
+
+                inicializarMapa();
+            } catch (error) {
+                console.error('Error al cargar configuración:', error);
+            }
+        }
+
+        function inicializarMapa() {
+            // Coordenadas de Malambo, Colombia
+            const malambo = {
+                lat: config.coordenadas?.lat || 11.0063,
+                lng: config.coordenadas?.lng || -74.7903
+            };
+
+            const mapDiv = document.getElementById('map');
+            if (!mapDiv) return;
+
+            // Crear un mapa simple con iframe de Google Maps
+            mapDiv.innerHTML = `
+                <iframe 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0" 
+                    style="border-radius: 8px;"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3927.6889405276386!2d-74.79033!3d11.00630!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e4587e1e0e0e0e1%3A0xe0e0e0e0e0e0e0e0!2sMalambo%2C%20Atl%C3%A1ntico!5e0!3m2!1ses!2sco!4v1234567890000"
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            `;
+        }
+
+        document.getElementById('contacto-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                nombre: document.getElementById('nombre').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('telefono').value,
+                asunto: document.getElementById('asunto').value,
+                mensaje: document.getElementById('mensaje').value
+            };
+
+            try {
+                const response = await apiRequest('/contacto', {
+                    method: 'POST',
+                    body: JSON.stringify(formData)
+                });
+
+                showAlert(response.mensaje, 'success');
+                document.getElementById('contacto-form').reset();
+            } catch (error) {
+                showAlert(error.message, 'error');
+            }
+        });
+
+        cargarInformacionContacto();
+    </script>
+</body>
+</html>
