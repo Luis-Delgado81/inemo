@@ -43,7 +43,7 @@ echo ==========================================
 echo 💡 INFORMACIÓN IMPORTANTE:
 echo ==========================================
 echo URL del sitio:       http://localhost:3000/
-echo Panel Admin:         http://localhost:3000/frontend/admin/
+echo Panel Admin:         inicia sesion desde el boton "Iniciar Sesion" del sitio
 echo Usuario demo:        admin
 echo Contraseña demo:     admin123
 echo.
