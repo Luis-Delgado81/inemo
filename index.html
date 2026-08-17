@@ -185,7 +185,7 @@
                 <p><strong style="color: var(--vinotinto);">Bienvenido,</strong> <span id="admin-user-name"></span></p>
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div id="tile-usuarios" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: none;">
                     <h3 style="color: var(--vinotinto); margin-top: 0;">👥 Usuarios</h3>
                     <button onclick="navegarA('admin-usuarios')" class="btn btn-primary" style="width: 100%;">Gestionar</button>
                 </div>
@@ -406,7 +406,7 @@
     <!-- Modal: Timeline -->
     <div id="modal-timeline" class="modal-overlay">
         <div class="modal-content">
-            <h2>Agregar Hito</h2>
+            <h2 id="modal-timeline-titulo-h">Agregar Hito</h2>
             <form onsubmit="guardarTimeline(event)">
                 <input type="hidden" id="modal-timeline-id">
                 <div class="form-group">
@@ -452,8 +452,10 @@
                     <input type="tel" id="modal-docente-telefono">
                 </div>
                 <div class="form-group">
-                    <label>Foto URL</label>
-                    <input type="url" id="modal-docente-foto" placeholder="https://...">
+                    <label>Foto</label>
+                    <input type="file" id="modal-docente-foto-file" accept="image/*" onchange="previsualizarFotoDocente(event)">
+                    <input type="hidden" id="modal-docente-foto">
+                    <img id="modal-docente-foto-preview" src="" alt="Vista previa" style="max-width:150px; max-height:150px; margin-top:10px; border-radius:4px; border:1px solid var(--borde); display:none;">
                 </div>
                 <div style="display: flex; gap: 10px;">
                     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -596,6 +598,7 @@
             } else if (pagina === 'admin') {
                 if (!verificarAdmin()) return;
                 document.getElementById('admin-user-name').textContent = getUser()?.nombre || 'Usuario';
+                document.getElementById('tile-usuarios').style.display = getUser()?.role === 'admin' ? 'block' : 'none';
             } else if (pagina === 'admin-noticias') {
                 if (!verificarAdmin()) return;
                 cargarAdminNoticias();
@@ -1027,6 +1030,8 @@
                 const res = await fetch(`${API}/timeline`);
                 const data = await res.json();
                 const container = document.getElementById('timeline-lista');
+                const user = getUser();
+                const puedeEditar = user && (user.role === 'admin' || user.role === 'editor');
                 if (data.data?.length > 0) {
                     const sortedData = data.data.sort((a, b) => a.ano - b.ano);
                     container.innerHTML = sortedData.map(t => `
@@ -1034,6 +1039,11 @@
                             <h3 style="color: var(--vinotinto); margin-top: 0;">${t.ano}</h3>
                             <h4>${t.titulo}</h4>
                             <p>${t.descripcion}</p>
+                            ${puedeEditar ? `
+                            <div style="margin-top: 10px;">
+                                <button onclick="editarTimeline(${t.id})" class="btn btn-small" style="background:#007bff; color:white; margin-right: 5px;">✏️ Editar</button>
+                                <button onclick="eliminarTimeline(${t.id})" class="btn btn-small" style="background:#dc3545; color:white;">✕ Eliminar</button>
+                            </div>` : ''}
                         </div>
                     `).join('');
                 }
@@ -1080,11 +1090,39 @@
         }
 
         function abrirModalTimeline() {
+            document.getElementById('modal-timeline-titulo-h').textContent = 'Agregar Hito';
             document.getElementById('modal-timeline-id').value = '';
             document.getElementById('modal-timeline-ano').value = new Date().getFullYear();
             document.getElementById('modal-timeline-titulo').value = '';
             document.getElementById('modal-timeline-descripcion').value = '';
             document.getElementById('modal-timeline').classList.add('active');
+        }
+
+        async function editarTimeline(id) {
+            try {
+                const token = getToken();
+                const res = await fetch(`${API}/timeline/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const t = await res.json();
+                document.getElementById('modal-timeline-titulo-h').textContent = 'Editar Hito';
+                document.getElementById('modal-timeline-id').value = t.id;
+                document.getElementById('modal-timeline-ano').value = t.ano;
+                document.getElementById('modal-timeline-titulo').value = t.titulo;
+                document.getElementById('modal-timeline-descripcion').value = t.descripcion;
+                document.getElementById('modal-timeline').classList.add('active');
+            } catch (e) {
+                showAlert('Error cargando hito: ' + e.message, 'error');
+            }
+        }
+
+        async function eliminarTimeline(id) {
+            if (!confirm('¿Eliminar hito?')) return;
+            const token = getToken();
+            try {
+                await fetch(`${API}/timeline/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                cargarTimeline();
+            } catch (e) { showAlert('Error: ' + e.message, 'error'); }
         }
 
         async function guardarTimeline(e) {
@@ -1128,7 +1166,19 @@
             document.getElementById('modal-docente-email').value = '';
             document.getElementById('modal-docente-telefono').value = '';
             document.getElementById('modal-docente-foto').value = '';
+            document.getElementById('modal-docente-foto-file').value = '';
+            const preview = document.getElementById('modal-docente-foto-preview');
+            preview.src = '';
+            preview.style.display = 'none';
             document.getElementById('modal-docente').classList.add('active');
+        }
+
+        function previsualizarFotoDocente(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const preview = document.getElementById('modal-docente-foto-preview');
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
         }
 
         async function editarDocente(id) {
@@ -1146,6 +1196,10 @@
                 document.getElementById('modal-docente-email').value = docente.email;
                 document.getElementById('modal-docente-telefono').value = docente.telefono;
                 document.getElementById('modal-docente-foto').value = docente.foto;
+                document.getElementById('modal-docente-foto-file').value = '';
+                const preview = document.getElementById('modal-docente-foto-preview');
+                preview.src = docente.foto || '';
+                preview.style.display = docente.foto ? 'block' : 'none';
                 document.getElementById('modal-docente').classList.add('active');
             } catch (e) {
                 showAlert('Error cargando docente: ' + e.message, 'error');
@@ -1158,15 +1212,35 @@
             if (!token) { alert('Inicia sesión'); return; }
 
             const id = document.getElementById('modal-docente-id').value;
-            const docente = {
-                nombre: document.getElementById('modal-docente-nombre').value,
-                especialidad: document.getElementById('modal-docente-especialidad').value,
-                email: document.getElementById('modal-docente-email').value,
-                telefono: document.getElementById('modal-docente-telefono').value,
-                foto: document.getElementById('modal-docente-foto').value || 'https://via.placeholder.com/300x400?text=Docente'
-            };
+            const archivo = document.getElementById('modal-docente-foto-file').files[0];
+            let foto = document.getElementById('modal-docente-foto').value;
 
             try {
+                if (archivo) {
+                    const formData = new FormData();
+                    formData.append('foto', archivo);
+                    const uploadRes = await fetch(`${API}/docentes/upload`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${token}` },
+                        body: formData
+                    });
+                    if (!uploadRes.ok) {
+                        const error = await uploadRes.json();
+                        showAlert(error.error || 'Error al subir la foto', 'error');
+                        return;
+                    }
+                    const uploadData = await uploadRes.json();
+                    foto = uploadData.url;
+                }
+
+                const docente = {
+                    nombre: document.getElementById('modal-docente-nombre').value,
+                    especialidad: document.getElementById('modal-docente-especialidad').value,
+                    email: document.getElementById('modal-docente-email').value,
+                    telefono: document.getElementById('modal-docente-telefono').value,
+                    foto: foto || 'https://via.placeholder.com/300x400?text=Docente'
+                };
+
                 const url = id ? `${API}/docentes/${id}` : `${API}/docentes`;
                 const method = id ? 'PUT' : 'POST';
                 const res = await fetch(url, {
@@ -1298,7 +1372,9 @@
             try {
                 const metodo = id ? 'PUT' : 'POST';
                 const url = id ? `${API}/usuarios/${id}` : `${API}/usuarios`;
-                const payload = id ? { nombre: datos.nombre, email: datos.email, role: datos.role } : datos;
+                const payload = id
+                    ? { nombre: datos.nombre, email: datos.email, role: datos.role, ...(datos.password ? { password: datos.password } : {}) }
+                    : datos;
                 
                 const res = await fetch(url, {
                     method: metodo,

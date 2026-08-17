@@ -1,7 +1,41 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const fs = require('fs');
+const multer = require('multer');
 const pool = require('../config/database');
 const { verifyAdmin } = require('../middleware/auth');
+
+const uploadDir = path.join(__dirname, '../../frontend/assets/images/docentes');
+fs.mkdirSync(uploadDir, { recursive: true });
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, uploadDir),
+    filename: (req, file, cb) => {
+        const nombreUnico = `docente-${Date.now()}-${Math.round(Math.random() * 1e9)}${path.extname(file.originalname)}`;
+        cb(null, nombreUnico);
+    }
+});
+
+const upload = multer({
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        if (!file.mimetype.startsWith('image/')) {
+            return cb(new Error('Solo se permiten archivos de imagen'));
+        }
+        cb(null, true);
+    }
+});
+
+// POST subir foto de docente
+router.post('/upload', verifyAdmin, (req, res) => {
+    upload.single('foto')(req, res, (err) => {
+        if (err) return res.status(400).json({ error: err.message });
+        if (!req.file) return res.status(400).json({ error: 'No se subió ningún archivo' });
+        res.json({ url: `/frontend/assets/images/docentes/${req.file.filename}` });
+    });
+});
 
 // GET all docentes
 router.get('/', async (req, res) => {

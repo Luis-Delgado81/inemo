@@ -114,7 +114,7 @@ router.post('/', verifyAdminOnly, async (req, res) => {
 // Actualizar usuario (solo admin)
 router.put('/:id', verifyAdminOnly, async (req, res) => {
   try {
-    const { nombre, email, role, activo } = req.body;
+    const { nombre, email, role, activo, password } = req.body;
     const connection = await pool.getConnection();
 
     const [usuarios] = await connection.query('SELECT * FROM usuarios WHERE id = ?', [req.params.id]);
@@ -142,10 +142,18 @@ router.put('/:id', verifyAdminOnly, async (req, res) => {
       activo: activo !== undefined ? activo : usuario.activo
     };
 
-    await connection.query(
-      'UPDATE usuarios SET nombre = ?, email = ?, role = ?, activo = ? WHERE id = ?',
-      [updates.nombre, updates.email, updates.role, updates.activo, req.params.id]
-    );
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await connection.query(
+        'UPDATE usuarios SET nombre = ?, email = ?, role = ?, activo = ?, password = ? WHERE id = ?',
+        [updates.nombre, updates.email, updates.role, updates.activo, hashedPassword, req.params.id]
+      );
+    } else {
+      await connection.query(
+        'UPDATE usuarios SET nombre = ?, email = ?, role = ?, activo = ? WHERE id = ?',
+        [updates.nombre, updates.email, updates.role, updates.activo, req.params.id]
+      );
+    }
 
     connection.release();
     res.json({ ...updates, id: req.params.id, mensaje: 'Usuario actualizado' });
