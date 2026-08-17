@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const pool = require('../database/db');
+const pool = require('../config/database');
 
 const SECRET_KEY = 'inemo-secret-key-2026';
 
@@ -36,7 +36,7 @@ router.get('/', verifyAdminOnly, async (req, res) => {
   try {
     const connection = await pool.getConnection();
     const [usuarios] = await connection.query(
-      'SELECT id, username, email, nombre, role, fecha_creacion, estado FROM usuarios ORDER BY fecha_creacion DESC'
+      'SELECT id, username, email, nombre, role, fecha_creacion, activo FROM usuarios ORDER BY fecha_creacion DESC'
     );
     connection.release();
     res.json({ data: usuarios });
@@ -50,7 +50,7 @@ router.get('/', verifyAdminOnly, async (req, res) => {
 router.get('/:id', verifyAdminOnly, async (req, res) => {
   try {
     const connection = await pool.getConnection();
-    const [usuarios] = await connection.query('SELECT id, username, email, nombre, role, estado FROM usuarios WHERE id = ?', [req.params.id]);
+    const [usuarios] = await connection.query('SELECT id, username, email, nombre, role, activo FROM usuarios WHERE id = ?', [req.params.id]);
     connection.release();
     if (usuarios.length === 0) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
@@ -90,8 +90,8 @@ router.post('/', verifyAdminOnly, async (req, res) => {
 
     // Crear usuario
     const [result] = await connection.query(
-      'INSERT INTO usuarios (username, email, password, nombre, role, estado) VALUES (?, ?, ?, ?, ?, ?)',
-      [username, email, hashedPassword, nombre, role, 'activo']
+      'INSERT INTO usuarios (username, email, password, nombre, role, activo) VALUES (?, ?, ?, ?, ?, ?)',
+      [username, email, hashedPassword, nombre, role, true]
     );
 
     connection.release();
@@ -102,7 +102,7 @@ router.post('/', verifyAdminOnly, async (req, res) => {
       email,
       nombre,
       role,
-      estado: 'activo',
+      activo: true,
       mensaje: 'Usuario creado exitosamente'
     });
   } catch (error) {
@@ -114,7 +114,7 @@ router.post('/', verifyAdminOnly, async (req, res) => {
 // Actualizar usuario (solo admin)
 router.put('/:id', verifyAdminOnly, async (req, res) => {
   try {
-    const { nombre, email, role, estado } = req.body;
+    const { nombre, email, role, activo } = req.body;
     const connection = await pool.getConnection();
 
     const [usuarios] = await connection.query('SELECT * FROM usuarios WHERE id = ?', [req.params.id]);
@@ -139,12 +139,12 @@ router.put('/:id', verifyAdminOnly, async (req, res) => {
       nombre: nombre || usuario.nombre,
       email: email || usuario.email,
       role: role || usuario.role,
-      estado: estado || usuario.estado
+      activo: activo !== undefined ? activo : usuario.activo
     };
 
     await connection.query(
-      'UPDATE usuarios SET nombre = ?, email = ?, role = ?, estado = ? WHERE id = ?',
-      [updates.nombre, updates.email, updates.role, updates.estado, req.params.id]
+      'UPDATE usuarios SET nombre = ?, email = ?, role = ?, activo = ? WHERE id = ?',
+      [updates.nombre, updates.email, updates.role, updates.activo, req.params.id]
     );
 
     connection.release();

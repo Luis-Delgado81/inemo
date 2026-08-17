@@ -186,11 +186,11 @@
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
                 <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <h3 style="color: var(--vinotinto); margin-top: 0;">� Usuarios</h3>
+                    <h3 style="color: var(--vinotinto); margin-top: 0;">👥 Usuarios</h3>
                     <button onclick="navegarA('admin-usuarios')" class="btn btn-primary" style="width: 100%;">Gestionar</button>
                 </div>
                 <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <h3 style="color: var(--vinotinto); margin-top: 0;">�📰 Noticias</h3>
+                    <h3 style="color: var(--vinotinto); margin-top: 0;">📰 Noticias</h3>
                     <button onclick="navegarA('admin-noticias')" class="btn btn-primary" style="width: 100%;">Gestionar</button>
                 </div>
                 <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
@@ -1238,7 +1238,7 @@
                         <td>${u.email}</td>
                         <td>${u.nombre}</td>
                         <td><span style="background: ${u.role === 'admin' ? '#dc3545' : u.role === 'editor' ? '#007bff' : '#28a745'}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">${u.role.toUpperCase()}</span></td>
-                        <td><span style="background: ${u.estado === 'activo' ? '#28a745' : '#dc3545'}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">${u.estado.toUpperCase()}</span></td>
+                        <td><span style="background: ${u.activo ? '#28a745' : '#dc3545'}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">${u.activo ? 'ACTIVO' : 'INACTIVO'}</span></td>
                         <td>
                             <button onclick="editarUsuario(${u.id})" class="btn btn-small" style="background:#007bff; color:white; margin-right: 5px;">✏️ Editar</button>
                             <button onclick="eliminarUsuario(${u.id})" class="btn btn-small" style="background:#dc3545; color:white;">✕ Eliminar</button>
@@ -1298,7 +1298,7 @@
             try {
                 const metodo = id ? 'PUT' : 'POST';
                 const url = id ? `${API}/usuarios/${id}` : `${API}/usuarios`;
-                const payload = id ? { nombre: datos.nombre, email: datos.email, role: datos.role, estado: 'activo' } : datos;
+                const payload = id ? { nombre: datos.nombre, email: datos.email, role: datos.role } : datos;
                 
                 const res = await fetch(url, {
                     method: metodo,
